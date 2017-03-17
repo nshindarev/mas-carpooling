@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- <include resource="org/springframework/boot/logging/logback/base.xml" /> -->
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- Log SCMessage format -->
+        <withJansi>true</withJansi>
+        <encoder>
+            <pattern>%green(%date{ISO8601}) [%32thread] %highlight(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>500</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="STDOUT" />
+    </appender>
+
+    <logger name="dreamteam.carpooling.Main"              level="trace"  additivity="false"><appender-ref ref="STDOUT"/></logger>
+    <logger name="dreamteam.carpooling"                   level="info"   additivity="false"><appender-ref ref="STDOUT"/></logger>
+    
+    <!-- root -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
