@@ -23,9 +23,9 @@ public class CitizenAgent extends Agent {
 
         // Поведения для роли водителя
         addBehaviour(new RegisterInYPBehaviour());
-        addBehaviour(new HandlePassengersOffersBehaviour());
+        addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
 
         // Поведения для роли пассажира
-        addBehaviour(new HandleDriversOffersBehaviour());
+        addBehaviour(new HandleDriversOffersBehaviour(this, 3000));
     }
 }
