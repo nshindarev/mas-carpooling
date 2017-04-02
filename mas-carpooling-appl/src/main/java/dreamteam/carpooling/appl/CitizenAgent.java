@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
  */
 public class CitizenAgent extends Agent {
 
+    private Car car = null;
+
     public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
 
     @Override
@@ -23,9 +25,19 @@ public class CitizenAgent extends Agent {
         super.setup();
         logger.info("Hello! Agent {} is ready.", getAID().getName());
 
+        // Смотрим, есть ли машина
+        Object[] args = getArguments();
+        if (args != null && args.length == 2) {
+            this.car = new Car(Byte.parseByte(args[0].toString()), Float.parseFloat(args[1].toString()));
+            logger.info("Agent {} has car with capacity {} and cost per km {}",
+                    getAID().getName(), car.getCapacity(), car.getCostPerKilometer());
+        }
+
         // Поведения для роли водителя
-        addBehaviour(new RegisterInYPBehaviour());
-        addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
+        if (car != null) {
+            addBehaviour(new RegisterInYPBehaviour());
+            addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
+        }
 
         // Поведения для роли пассажира
         addBehaviour(new HandleDriversOffersBehaviour(this, 3000));
