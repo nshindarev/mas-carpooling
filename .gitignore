@@ -7,3 +7,7 @@
 **/*.class
 **/*.jar
 **/target
+
+# jade config
+MTPs-Main-Container.txt
+APDescription.txt

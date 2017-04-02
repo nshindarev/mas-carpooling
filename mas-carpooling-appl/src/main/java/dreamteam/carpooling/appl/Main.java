@@ -12,6 +12,10 @@ public class Main {
 
     public static void main(String[] args) {
         logger.info("Application started by {} class. ", Main.class.getName());
+        jade.Boot.main(new String[] {
+                "-gui",
+                "god:dreamteam.carpooling.appl.Util.CreatorAgent"
+        });
     }
 
 }
