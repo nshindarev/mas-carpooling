@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl;
 
+import dreamteam.carpooling.appl.Util.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +17,12 @@ public class Main {
                 "-gui",
                 "god:dreamteam.carpooling.appl.Util.CreatorAgent"
         });
+
+
+
+        // в качестве параметра -> путь к файлу .gml от mas-carpooling
+        Parser parser = new Parser();
+        parser.parseCityFromFile();
     }
 
 }
