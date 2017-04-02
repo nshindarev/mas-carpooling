@@ -5,6 +5,8 @@ import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversOffersBehaviour;
 
 import jade.core.Agent;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,4 +30,16 @@ public class CitizenAgent extends Agent {
         // Поведения для роли пассажира
         addBehaviour(new HandleDriversOffersBehaviour());
     }
+
+    @Override
+    protected void takeDown() {
+        // Deregister from the yellow pages
+        try {
+            DFService.deregister(this);
+        }
+        catch (FIPAException fe) {
+            fe.printStackTrace();
+        }
+    }
+
 }
