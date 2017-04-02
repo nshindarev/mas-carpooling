@@ -36,6 +36,7 @@ public class Parser {
     catch (Exception ex){
         logger.error(ex.getMessage());
     }
+        parseCityFromFile();
     }
     public Parser (){
         try {
@@ -44,6 +45,7 @@ public class Parser {
         catch (Exception ex){
             logger.error(ex.getMessage());
         }
+        parseCityFromFile();
 
     }
 
