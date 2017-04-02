@@ -1,5 +1,8 @@
 package dreamteam.carpooling.appl;
 
+import dreamteam.carpooling.appl.Util.Parser;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +19,12 @@ public class Main {
                 "-gui",
                 "god:dreamteam.carpooling.appl.Util.CreatorAgent"
         });
+
+
+
+        // в качестве параметра -> путь к файлу .gml от mas-carpooling
+        Parser parser = new Parser();
+        Graph<String, DefaultWeightedEdge> city = parser.getCity();
     }
 
 }
