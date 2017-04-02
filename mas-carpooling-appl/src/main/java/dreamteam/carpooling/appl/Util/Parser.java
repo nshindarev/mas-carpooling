@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Created by nshindarev on 02.04.17.
+ *  Парсер. Считывает город из файла. Город доступен по методу getCity()
  */
 
 public class Parser {
@@ -28,7 +28,11 @@ public class Parser {
             return this.city;
     }
 
-    //constructor
+
+    /**
+     *
+     * @param city_file путь к файлу от root-директории
+     */
     public Parser (File city_file){
     try{
         this.city_file = city_file;
