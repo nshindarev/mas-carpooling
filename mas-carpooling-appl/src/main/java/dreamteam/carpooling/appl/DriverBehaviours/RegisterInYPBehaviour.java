@@ -24,7 +24,11 @@ public class RegisterInYPBehaviour extends OneShotBehaviour {
         sd.setType("carpooling");
         sd.setName("JADE-carpooling");
 
-        // TODO: добавить маршрут
+        // TODO: добавить маршрут, районы
+        Property p = new Property();
+        p.setName("districts");
+        p.setValue("D1,D2,D3");
+        sd.addProperties(p);
 
         dfd.addServices(sd);
 
