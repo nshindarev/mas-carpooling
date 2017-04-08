@@ -5,10 +5,23 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
+import dreamteam.carpooling.appl.Util.Parameters;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CreatorAgent extends Agent {
 
     @Override
     protected void setup() {
+
+        Integer countAgents = 5;
+
+        Object[] args = getArguments();
+        if (args != null && args.length > 0) {
+            countAgents = Integer.parseInt(args[0].toString());
+        }
+
         ContainerController cc = getContainerController();
         try {
             AgentController gosha  = cc.createNewAgent("gosha",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
