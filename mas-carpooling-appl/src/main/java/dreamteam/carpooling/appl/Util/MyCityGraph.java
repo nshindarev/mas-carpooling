@@ -42,7 +42,7 @@ public class MyCityGraph<V,E> extends SimpleWeightedGraph<V,E> {
            logger.error("Nullpointer!!!!!!!!");
        }
         if (b){
-            this.city_districts.add(new District(vertexes));
+            this.city_districts.add(new District(district_name, vertexes));
             for (String s:
                  vertexes) {
                 this.vertexes_used_in_districts.add(s);
