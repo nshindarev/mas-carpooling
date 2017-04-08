@@ -3,19 +3,15 @@ package dreamteam.carpooling.appl;
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
-
+import dreamteam.carpooling.appl.Util.MyCityGraph;
 import dreamteam.carpooling.appl.Util.Parser;
 import jade.core.AID;
 import jade.core.Agent;
-import org.jgrapht.Graph;
-import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
-import org.jgrapht.alg.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
+import org.jgrapht.graph.DefaultWeightedEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +23,8 @@ import java.util.List;
 public class CitizenAgent extends Agent {
 
     private Car car = null;
-    private Graph<String, DefaultWeightedEdge> city = new Parser().getCity();
+
+    private MyCityGraph<String, DefaultWeightedEdge> city = new Parser().getCity();
 
     private String start, finish;
 
@@ -79,6 +76,10 @@ public class CitizenAgent extends Agent {
 
     public String getFinish() {
         return finish;
+    }
+
+    public MyCityGraph<String, DefaultWeightedEdge> getCity() {
+        return city;
     }
 
 

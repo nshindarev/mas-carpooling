@@ -1,6 +1,7 @@
 package dreamteam.carpooling.appl.PassengerBehaviours;
 
 import dreamteam.carpooling.appl.CitizenAgent;
+import dreamteam.carpooling.appl.Util.District;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
@@ -69,9 +70,23 @@ public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
     }
 
     private boolean districtsAreSuitable(String[] districts) {
-        // TODO: проверять, содержатся ли точки старта и финиша в маршруте
-        String start  = myCitizenAgent.getStart();
-        String finish = myCitizenAgent.getFinish();
-        return true;
+        boolean foundStartDistrict  = false;
+        boolean foundFinishDistrict = false;
+
+        String startVertex  = myCitizenAgent.getStart();
+        String finishVertex = myCitizenAgent.getFinish();
+
+        // TODO: выбирать только те districts, которые в параметрах метода
+        for (District district : myCitizenAgent.getCity().getCity_districts()) {
+            if (!foundStartDistrict) {
+                foundStartDistrict = district.isInDistrict(startVertex);
+            } else if (!foundFinishDistrict) {
+                foundFinishDistrict = district.isInDistrict(finishVertex);
+            } else {
+                break;
+            }
+        }
+
+        return foundStartDistrict && foundFinishDistrict;
     }
 }
