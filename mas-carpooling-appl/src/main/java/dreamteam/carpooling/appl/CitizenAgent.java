@@ -5,6 +5,7 @@ import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 
 import dreamteam.carpooling.appl.Util.Parser;
+import jade.core.AID;
 import jade.core.Agent;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -12,6 +13,9 @@ import jade.domain.DFService;
 import jade.domain.FIPAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Агент - житель города. Каждый агент может играть две роли: пассажира и водителя.
@@ -23,6 +27,8 @@ public class CitizenAgent extends Agent {
     private Graph<String, DefaultWeightedEdge> city = new Parser().getCity();
 
     private String start, finish;
+
+    public List<AID> suitableDrivers = new LinkedList<>();
 
     public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
 
