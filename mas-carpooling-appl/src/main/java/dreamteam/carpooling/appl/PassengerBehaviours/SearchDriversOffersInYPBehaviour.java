@@ -7,14 +7,14 @@ import jade.core.behaviours.TickerBehaviour;
 /**
  * Обработка предложений от водителей
  */
-public class HandleDriversOffersBehaviour extends TickerBehaviour {
+public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
 
-    public HandleDriversOffersBehaviour(Agent a, long period) {
+    public SearchDriversOffersInYPBehaviour(Agent a, long period) {
         super(a, period);
     }
 
     @Override
     protected void onTick() {
-        CitizenAgent.logger.info("{} is handling a proposal from driver", myAgent.getAID().getName());
+        CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getName());
     }
 }

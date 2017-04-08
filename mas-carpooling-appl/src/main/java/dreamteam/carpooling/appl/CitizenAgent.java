@@ -2,7 +2,7 @@ package dreamteam.carpooling.appl;
 
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
-import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversOffersBehaviour;
+import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 
 import dreamteam.carpooling.appl.Util.Parser;
 import jade.core.Agent;
@@ -61,7 +61,7 @@ public class CitizenAgent extends Agent {
         }
 
         // Поведения для роли пассажира
-        addBehaviour(new HandleDriversOffersBehaviour(this, 3000));
+        addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
     }
 
     public String getStart() {
