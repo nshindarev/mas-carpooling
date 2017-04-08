@@ -36,7 +36,7 @@ public class CitizenAgent extends Agent {
      */
     private double greed;
 
-    public List<MyWeightedEdge> getCurrentRoot(){
+    public List<MyWeightedEdge> getCurrentRoute(){
         return  this.wayWithMyCar;
     }
     public double getCurrentPrice(){ return  this.price;}
