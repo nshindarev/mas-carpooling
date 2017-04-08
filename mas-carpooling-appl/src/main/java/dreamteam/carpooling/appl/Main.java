@@ -1,14 +1,7 @@
 package dreamteam.carpooling.appl;
 
-import dreamteam.carpooling.appl.Util.MyCityGraph;
-import dreamteam.carpooling.appl.Util.Parser;
-import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 /**
  * Created by nshindarev on 17.03.17.
@@ -25,7 +18,7 @@ public class Main {
         });
 
 
-
+/*
         // в качестве параметра -> путь к файлу .gml от mas-carpooling
         Parser parser = new Parser();
         MyCityGraph<String, DefaultWeightedEdge> city = parser.getCity();
@@ -46,7 +39,7 @@ public class Main {
 
         city.getCity_districts().toString();
         logger.debug(city.getCity_districts().toString());
-        logger.isDebugEnabled();
+        logger.isDebugEnabled();*/
     }
 
 }

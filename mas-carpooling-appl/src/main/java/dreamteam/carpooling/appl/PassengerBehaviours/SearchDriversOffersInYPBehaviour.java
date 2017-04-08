@@ -76,8 +76,8 @@ public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
         String startVertex  = myCitizenAgent.getStart();
         String finishVertex = myCitizenAgent.getFinish();
 
-        // TODO: выбирать только те districts, которые в параметрах метода
-        for (District district : myCitizenAgent.getCity().getCity_districts()) {
+        for (String name: districts) {
+            District district = myCitizenAgent.getCity().getDistrictByName(name);
             if (!foundStartDistrict) {
                 foundStartDistrict = district.isInDistrict(startVertex);
             } else if (!foundFinishDistrict) {
