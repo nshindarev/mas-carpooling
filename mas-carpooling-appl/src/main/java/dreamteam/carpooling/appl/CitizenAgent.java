@@ -2,18 +2,25 @@ package dreamteam.carpooling.appl;
 
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
-import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversOffersBehaviour;
+import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 
 import dreamteam.carpooling.appl.Util.Parser;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.util.leap.LinkedList;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+<<<<<<< HEAD
+=======
+import java.util.LinkedList;
+>>>>>>> feature/add_districts
 import java.util.List;
 
 /**
@@ -26,6 +33,8 @@ public class CitizenAgent extends Agent {
     private Graph<String, DefaultWeightedEdge> city = new Parser().getCity();
 
     private String start, finish;
+
+    public List<AID> suitableDrivers = new LinkedList<>();
 
     public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
 
@@ -64,7 +73,7 @@ public class CitizenAgent extends Agent {
         }
 
         // Поведения для роли пассажира
-        addBehaviour(new HandleDriversOffersBehaviour(this, 3000));
+        addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
     }
 
     public String getStart() {
@@ -75,9 +84,23 @@ public class CitizenAgent extends Agent {
         return finish;
     }
 
+<<<<<<< HEAD
     /*public List<String> getWayByMyCar(){
         List<String> my_way = new java.util.LinkedList<String>();
         List<DefaultWeightedEdge> edges_in_way =
                 DijkstraShortestPath.findPathBetween(this.city, start, finish);
     }*/
+=======
+    @Override
+    protected void takeDown() {
+        // Deregister from the yellow pages
+        try {
+            DFService.deregister(this);
+        }
+        catch (FIPAException fe) {
+            fe.printStackTrace();
+        }
+    }
+
+>>>>>>> feature/add_districts
 }
