@@ -26,6 +26,13 @@ public class Parameters {
         this.costPerKmPath = costPerKmPath;
     }
 
+    public Parameters(String startPath, String finishPath) {
+        this.startPath = startPath;
+        this.finishPath = finishPath;
+        this.capacityPath = null;
+        this.costPerKmPath = null;
+    }
+
 
     public boolean isComplete() {
         return startPath != null
