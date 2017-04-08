@@ -17,6 +17,8 @@ public class CreatorAgent extends Agent {
             gosha.start();
             nastya.start();
             nick.start();
+
+            
         } catch (StaleProxyException spe) {
             spe.printStackTrace();
         }

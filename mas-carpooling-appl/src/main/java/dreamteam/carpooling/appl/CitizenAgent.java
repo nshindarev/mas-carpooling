@@ -4,9 +4,9 @@ import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviou
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversOffersBehaviour;
 
+import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.Util.Parser;
 import jade.core.Agent;
-import jade.util.leap.LinkedList;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -14,6 +14,7 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,9 +24,14 @@ import java.util.List;
 public class CitizenAgent extends Agent {
 
     private Car car = null;
-    private Graph<String, DefaultWeightedEdge> city = new Parser().getCity();
+    private Graph<String, MyWeightedEdge> city = new Parser().getCity();
 
     private String start, finish;
+    private List<MyWeightedEdge> wayWithMyCar;
+    /**
+     * коэфициент жадности для водителя
+     */
+    private double greed;
 
     public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
 
@@ -61,10 +67,15 @@ public class CitizenAgent extends Agent {
         if (car != null) {
             addBehaviour(new RegisterInYPBehaviour());
             addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
+
+            this.wayWithMyCar = null;
+            getWayByMyCar();
         }
 
         // Поведения для роли пассажира
         addBehaviour(new HandleDriversOffersBehaviour(this, 3000));
+
+        this.greed = Math.random() * 0.15;
     }
 
     public String getStart() {
@@ -75,9 +86,29 @@ public class CitizenAgent extends Agent {
         return finish;
     }
 
-    /*public List<String> getWayByMyCar(){
-        List<String> my_way = new java.util.LinkedList<String>();
-        List<DefaultWeightedEdge> edges_in_way =
-                DijkstraShortestPath.findPathBetween(this.city, start, finish);
-    }*/
+    /**
+     * Расчет оптимального алгоритма следования от старта к финишу
+     * на собственном автомобиле
+     * @return результат работы алгоритма Дейкстры
+     */
+    public List<MyWeightedEdge> getWayByMyCar(){
+        if (this.wayWithMyCar == null) {
+            wayWithMyCar = new LinkedList<>();
+            return  DijkstraShortestPath.findPathBetween(this.city, start, finish);
+        }
+        else{
+            return this.wayWithMyCar;
+        }
+    }
+    public double getCostByMyCar(){
+        double sum = 0;
+        if (this.wayWithMyCar == null){
+            for (MyWeightedEdge e:
+                 getWayByMyCar()) {
+                sum += e.get_weight();
+            }
+            sum *= car.getCapacity();
+        }
+        return sum;
+    }
 }

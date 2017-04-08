@@ -22,11 +22,11 @@ public class Parser {
     private File city_file;
     private VertexProvider<String> vertex_provider;
     private EdgeProvider<String, Integer> edge_provider;
-    private MyCityGraph<String, DefaultWeightedEdge> city;
+    private MyCityGraph<String, MyWeightedEdge> city;
 
 
     //public fields
-    public MyCityGraph<String, DefaultWeightedEdge> getCity (){
+    public MyCityGraph<String, MyWeightedEdge> getCity (){
             return this.city;
     }
 
@@ -56,10 +56,10 @@ public class Parser {
 
 
     public void parseCityFromFile(){
-        this.city = new MyCityGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+        this.city = new MyCityGraph<String, MyWeightedEdge>(MyWeightedEdge.class);
 
 
-        GmlImporter<String,DefaultWeightedEdge> importer =
+        GmlImporter<String,MyWeightedEdge> importer =
                 new GmlImporter<>(
                         (String label, Map<String, String> attributes)
                                  -> {return label;},

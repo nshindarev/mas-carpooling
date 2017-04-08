@@ -39,7 +39,7 @@ public class MyCityGraph<V,E> extends SimpleWeightedGraph<V,E> {
            }
        }
        catch (NullPointerException ex){
-           logger.error("Nullpointer!!!!!!!!");
+           logger.error(ex.getMessage());
        }
         if (b){
             this.city_districts.add(new District(district_name, vertexes));
