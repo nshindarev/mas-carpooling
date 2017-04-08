@@ -8,6 +8,8 @@ import dreamteam.carpooling.appl.Util.Parser;
 import jade.core.Agent;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,4 +71,16 @@ public class CitizenAgent extends Agent {
     public String getFinish() {
         return finish;
     }
+
+    @Override
+    protected void takeDown() {
+        // Deregister from the yellow pages
+        try {
+            DFService.deregister(this);
+        }
+        catch (FIPAException fe) {
+            fe.printStackTrace();
+        }
+    }
+
 }
