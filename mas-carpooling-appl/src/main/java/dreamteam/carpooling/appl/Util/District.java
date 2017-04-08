@@ -12,16 +12,19 @@ public class District {
      * перечень вершин в районе
      */
     private ArrayList<String> vertexes = new ArrayList<>();
+    private String districtName;
 
     public ArrayList<String> getVertexes(){
         return this.vertexes;
     }
+    public String getDistrictName(){ return this.districtName; }
 
-    public District (List<String> v_in_district){
+    public District (String districtName, List<String> v_in_district){
         for (String s:
              v_in_district) {
             vertexes.add(s);
         }
+        this.districtName = districtName;
     }
 
     public boolean isInDistrict (String vertex){
@@ -32,5 +35,7 @@ public class District {
     public static boolean isInDistrict (District d, String v){
        return d.isInDistrict(v);
     }
+
+
 }
 
