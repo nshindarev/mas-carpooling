@@ -7,7 +7,6 @@ import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBeha
 import dreamteam.carpooling.appl.Util.Parser;
 import jade.core.AID;
 import jade.core.Agent;
-import jade.util.leap.LinkedList;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -17,10 +16,8 @@ import jade.domain.FIPAException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-<<<<<<< HEAD
-=======
+
 import java.util.LinkedList;
->>>>>>> feature/add_districts
 import java.util.List;
 
 /**
@@ -84,13 +81,13 @@ public class CitizenAgent extends Agent {
         return finish;
     }
 
-<<<<<<< HEAD
+
     /*public List<String> getWayByMyCar(){
         List<String> my_way = new java.util.LinkedList<String>();
         List<DefaultWeightedEdge> edges_in_way =
                 DijkstraShortestPath.findPathBetween(this.city, start, finish);
     }*/
-=======
+
     @Override
     protected void takeDown() {
         // Deregister from the yellow pages
@@ -102,5 +99,4 @@ public class CitizenAgent extends Agent {
         }
     }
 
->>>>>>> feature/add_districts
 }
