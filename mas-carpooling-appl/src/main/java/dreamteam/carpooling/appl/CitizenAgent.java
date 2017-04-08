@@ -23,17 +23,24 @@ import java.util.List;
  */
 public class CitizenAgent extends Agent {
 
+    public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
+
     private Car car = null;
     private Graph<String, MyWeightedEdge> city = new Parser().getCity();
 
     private String start, finish;
-    private List<MyWeightedEdge> wayWithMyCar;
+    private List<MyWeightedEdge> wayWithMyCar = null;
+    private double price = Double.MAX_VALUE;
     /**
      * коэфициент жадности для водителя
      */
     private double greed;
 
-    public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
+    public List<MyWeightedEdge> getCurrentRoot(){
+        return  this.wayWithMyCar;
+    }
+    public double getCurrentPrice(){ return  this.price;}
+
 
     @Override
     protected void setup() {
@@ -70,6 +77,7 @@ public class CitizenAgent extends Agent {
 
             this.wayWithMyCar = null;
             getWayByMyCar();
+            getCostByMyCar();
         }
 
         // Поведения для роли пассажира
@@ -94,7 +102,8 @@ public class CitizenAgent extends Agent {
     public List<MyWeightedEdge> getWayByMyCar(){
         if (this.wayWithMyCar == null) {
             wayWithMyCar = new LinkedList<>();
-            return  DijkstraShortestPath.findPathBetween(this.city, start, finish);
+            this.wayWithMyCar =  DijkstraShortestPath.findPathBetween(this.city, start, finish);
+            return this.wayWithMyCar;
         }
         else{
             return this.wayWithMyCar;
@@ -102,13 +111,15 @@ public class CitizenAgent extends Agent {
     }
     public double getCostByMyCar(){
         double sum = 0;
-        if (this.wayWithMyCar == null){
+        if (this.price == Double.MAX_VALUE){
             for (MyWeightedEdge e:
                  getWayByMyCar()) {
                 sum += e.get_weight();
             }
             sum *= car.getCapacity();
+            this.price = sum;
         }
+        else sum = this.price;
         return sum;
     }
 }
