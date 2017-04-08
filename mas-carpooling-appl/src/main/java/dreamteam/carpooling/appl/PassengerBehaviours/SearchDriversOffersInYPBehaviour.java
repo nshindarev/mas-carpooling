@@ -80,9 +80,11 @@ public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
             District district = myCitizenAgent.getCity().getDistrictByName(name);
             if (!foundStartDistrict) {
                 foundStartDistrict = district.isInDistrict(startVertex);
-            } else if (!foundFinishDistrict) {
+            }
+            if (!foundFinishDistrict) {
                 foundFinishDistrict = district.isInDistrict(finishVertex);
-            } else {
+            }
+            if (foundStartDistrict && foundFinishDistrict) {
                 break;
             }
         }
