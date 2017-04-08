@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,13 +22,13 @@ public class Parser {
     private File city_file;
     private VertexProvider<String> vertex_provider;
     private EdgeProvider<String, Integer> edge_provider;
-    private Graph<String, DefaultWeightedEdge> city;
+    private MyCityGraph<String, DefaultWeightedEdge> city;
+
 
     //public fields
-    public Graph<String, DefaultWeightedEdge> getCity (){
+    public MyCityGraph<String, DefaultWeightedEdge> getCity (){
             return this.city;
     }
-
 
     /**
      *
@@ -55,7 +56,7 @@ public class Parser {
 
 
     public void parseCityFromFile(){
-        this.city = new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+        this.city = new MyCityGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
 
 
         GmlImporter<String,DefaultWeightedEdge> importer =
@@ -64,6 +65,7 @@ public class Parser {
                                  -> {return label;},
                         (String from, String to, String label, Map<String, String> attributes)
                                  -> { return city.getEdgeFactory().createEdge(from, to); });
+
 
 
         try{

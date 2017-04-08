@@ -6,10 +6,15 @@ import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversOffersBehaviou
 
 import dreamteam.carpooling.appl.Util.Parser;
 import jade.core.Agent;
+import jade.util.leap.LinkedList;
 import org.jgrapht.Graph;
+import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
+import org.jgrapht.alg.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 /**
  * Агент - житель города. Каждый агент может играть две роли: пассажира и водителя.
@@ -69,4 +74,10 @@ public class CitizenAgent extends Agent {
     public String getFinish() {
         return finish;
     }
+
+    /*public List<String> getWayByMyCar(){
+        List<String> my_way = new java.util.LinkedList<String>();
+        List<DefaultWeightedEdge> edges_in_way =
+                DijkstraShortestPath.findPathBetween(this.city, start, finish);
+    }*/
 }
