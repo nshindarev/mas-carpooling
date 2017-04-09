@@ -42,8 +42,7 @@ public class Parameters {
     }
 
     public boolean havCar() {
-        return capacityPath   != null
-                && costPerKmPath   != null;
+        return !capacityPath.equals("0");
     }
 
 
