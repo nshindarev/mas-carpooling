@@ -17,7 +17,7 @@ public class CreatorAgent extends Agent {
     private final Integer countAgentsDefault = 5;
     private final Integer maxCapacityCarConst = 5;
     private final Integer maxCoefRandCost = 9;
-    private Integer maxVertexCity = 11; 
+    private Integer maxVertexCity = 11;
 
     @Override
     protected void setup() {
@@ -25,10 +25,46 @@ public class CreatorAgent extends Agent {
         maxVertexCity = new Parser().getCity().vertexSet().size();
 
         Integer countAgents = null;
+        Integer countDrivers = null;
+        Boolean isAutoGenerateAgents = true;
+        Integer delayAgents = null;
 
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
-            countAgents = Integer.parseInt(args[0].toString());
+            if (args[0].toString().equals("yes")){
+                isAutoGenerateAgents = true;
+            } else{
+                isAutoGenerateAgents = false;
+            }
+            countAgents = Integer.parseInt(args[1].toString());
+            countDrivers = Integer.parseInt(args[2].toString());
+            delayAgents = Integer.parseInt(args[3].toString());
+        }
+
+        if (countDrivers > countAgents){
+            countDrivers = countAgents;
+        }
+
+        ContainerController cc = getContainerController();
+        AgentController agent;
+
+        try {
+            if (!isAutoGenerateAgents){
+                // Ручное создание агентов
+                AgentController gosha   = cc.createNewAgent("gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
+                AgentController nastya  = cc.createNewAgent("nastya",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 3, 4 });
+                AgentController nick    = cc.createNewAgent("nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
+                AgentController iskrich = cc.createNewAgent("iskrich", "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 7, 3, 10 });
+
+                gosha.start();
+                nastya.start();
+                nick.start();
+                iskrich.start();
+
+                return;
+            }
+        } catch (StaleProxyException spe) {
+            spe.printStackTrace();
         }
 
         if (countAgents == null)
@@ -36,32 +72,20 @@ public class CreatorAgent extends Agent {
 
         Parameters agentParameters;
 
-        ContainerController cc = getContainerController();
+        Integer curCountDriver = 0;
+
         try {
 
-            // !!!!!!! При запуске системы нужно выбирать, создавать агентов вручную или генерировать автоматически.
-            // Код, отвечающий за тот или иной способ, нужно раскомментировать.
-            // В ветке develop пока оставляем ручное создание
-            // TODO: сделать параметр конфигурации для выбора автогенерации
-
-            // Ручное создание агентов
-            AgentController gosha   = cc.createNewAgent("gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
-            AgentController nastya  = cc.createNewAgent("nastya",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 3, 4 });
-            AgentController nick    = cc.createNewAgent("nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
-            AgentController iskrich = cc.createNewAgent("iskrich", "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 7, 3, 10 });
-
-            gosha.start();
-            nastya.start();
-            nick.start();
-            iskrich.start();
-
             // Автоматическая генерация
-            /*
             for (int i = 0; i < countAgents; i++){
                 String nameAgent = "agent_" + i;
                 final Random random = new Random();
 
-                Integer capacityCar = random.nextInt(maxCapacityCarConst) + 1; // вместимость машины от 1 до maxCapacityCarConst
+                Integer capacityCar = 0;
+                if (curCountDriver < countDrivers){
+                    capacityCar = random.nextInt(maxCapacityCarConst) + 1; // вместимость машины от 1 до maxCapacityCarConst
+                    curCountDriver++;
+                }
                 Integer costPerKm = capacityCar * (random.nextInt(maxCoefRandCost) + 1);
 
                 Integer startVertex = random.nextInt(maxVertexCity - 1) + 1;
@@ -70,7 +94,6 @@ public class CreatorAgent extends Agent {
                 agentParameters = new Parameters(String.valueOf(startVertex), String.valueOf(endVertex),
                         String.valueOf(capacityCar), String.valueOf(costPerKm));
 
-                AgentController agent;
 
                 if (agentParameters.havCar()){
                     agent  = cc.createNewAgent(nameAgent,  "dreamteam.carpooling.appl.CitizenAgent",
@@ -81,11 +104,13 @@ public class CreatorAgent extends Agent {
                 }
 
                 agent.start();
+                Thread.sleep(delayAgents.intValue());
             }
-            */
 
         } catch (StaleProxyException spe) {
             spe.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
