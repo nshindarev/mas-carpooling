@@ -2,14 +2,28 @@ package dreamteam.carpooling.appl;
 
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
-import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversOffersBehaviour;
 
+import dreamteam.carpooling.appl.Util.MyWeightedEdge;
+import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
+import dreamteam.carpooling.appl.Util.MyCityGraph;
 import dreamteam.carpooling.appl.Util.Parser;
+
+import jade.core.AID;
 import jade.core.Agent;
+
 import org.jgrapht.Graph;
+import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
+import org.jgrapht.alg.DijkstraShortestPath;
+
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Агент - житель города. Каждый агент может играть две роли: пассажира и водителя.
@@ -17,12 +31,25 @@ import org.slf4j.LoggerFactory;
  */
 public class CitizenAgent extends Agent {
 
+    public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
+
     private Car car = null;
-    private Graph<String, DefaultWeightedEdge> city = new Parser().getCity();
+    private MyCityGraph<String, MyWeightedEdge> city = new Parser().getCity();
 
     private String start, finish;
+    private List<MyWeightedEdge> wayWithMyCar = null;
+    private double price = Double.MAX_VALUE;
+    /**
+     * коэфициент жадности для водителя
+     */
+    private double greed;
 
-    public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
+    public List<MyWeightedEdge> getCurrentRoute(){
+        return  this.wayWithMyCar;
+    }
+    public double getCurrentPrice(){ return  this.price;}
+
+    public List<AID> suitableDrivers = new LinkedList<>();
 
     @Override
     protected void setup() {
@@ -56,10 +83,16 @@ public class CitizenAgent extends Agent {
         if (car != null) {
             addBehaviour(new RegisterInYPBehaviour());
             addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
+
+            this.wayWithMyCar = null;
+            getWayByMyCar();
+            getCostByMyCar();
         }
 
+        this.greed = Math.random() * 0.15;
+
         // Поведения для роли пассажира
-        addBehaviour(new HandleDriversOffersBehaviour(this, 3000));
+        addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
     }
 
     public String getStart() {
@@ -69,4 +102,51 @@ public class CitizenAgent extends Agent {
     public String getFinish() {
         return finish;
     }
+
+    /**
+     * Расчет оптимального алгоритма следования от старта к финишу
+     * на собственном автомобиле
+     * @return результат работы алгоритма Дейкстры
+     */
+    public List<MyWeightedEdge> getWayByMyCar(){
+        if (this.wayWithMyCar == null) {
+            wayWithMyCar = new LinkedList<>();
+            this.wayWithMyCar =  DijkstraShortestPath.findPathBetween(this.city, start, finish);
+            return this.wayWithMyCar;
+        }
+        else{
+            return this.wayWithMyCar;
+        }
+    }
+    public double getCostByMyCar(){
+        double sum = 0;
+        if (this.price == Double.MAX_VALUE){
+            for (MyWeightedEdge e:
+                 getWayByMyCar()) {
+                sum += e.get_weight();
+            }
+            sum *= car.getCapacity();
+            this.price = sum;
+        }
+        else sum = this.price;
+        return sum;
+    }
+
+    public MyCityGraph<String, MyWeightedEdge> getCity() {
+        return city;
+    }
+
+
+
+    @Override
+    protected void takeDown() {
+        // Deregister from the yellow pages
+        try {
+            DFService.deregister(this);
+        }
+        catch (FIPAException fe) {
+            fe.printStackTrace();
+        }
+    }
+
 }

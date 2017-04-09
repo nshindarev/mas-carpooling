@@ -1,11 +1,14 @@
 package dreamteam.carpooling.appl;
 
+
+import dreamteam.carpooling.appl.Util.MyCityGraph;
+import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.Util.Parser;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultWeightedEdge;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -17,12 +20,16 @@ import org.apache.commons.cli.CommandLineParser;
 
 import dreamteam.carpooling.appl.MainParameters;
 
+import java.util.LinkedList;
+
 /**
  * Created by nshindarev on 17.03.17.
  */
 public class Main {
 
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
+
+    private static final String countAgents = "count_agents";
 
     public static void main(String[] args) {
         logger.info("Application started by {} class. ", Main.class.getName());
@@ -35,11 +42,29 @@ public class Main {
 
         // в качестве параметра -> путь к файлу .gml от mas-carpooling
         Parser parser = new Parser();
-        Graph<String, DefaultWeightedEdge> city = parser.getCity();
 
+        MyCityGraph<String, MyWeightedEdge> city = parser.getCity();
+
+        city.addCity_district("D1", new LinkedList<String>() {{
+            add("1");
+            add("2");
+            add("3");
+            add("4");
+        }});
+
+        city.addCity_district("D1", new LinkedList<String>() {{
+            add("5");
+            add("6");
+            add("7");
+            add("8");
+        }});
+
+        city.getCity_districts().toString();
+
+        logger.debug(city.getCity_districts().toString());
+        logger.isDebugEnabled();
     }
 
-    private static final String countAgents = "count_agents";
 
     private static MainParameters parseParameters(String... args) {
         Options options = new Options();
@@ -56,7 +81,7 @@ public class Main {
             for (String par : new String[]{countAgents}) {
                 String countPar = cl.getOptionValue(par);
 
-                if(countPar == null) {
+                if (countPar == null) {
                     logger.error("Не задан параметр {}", par);
                     params = false;
                 }
@@ -67,8 +92,7 @@ public class Main {
                     parameters.setCountAgents(ca);
                 }
             }
-        }
-        catch (ParseException pe){
+        } catch (ParseException pe) {
             logger.error("Не удаётся разобрать строку параметров: {}", pe.getLocalizedMessage());
             params = false;
         }
@@ -82,5 +106,6 @@ public class Main {
         logger.debug("Parameters: {}", parameters.toString());
         return parameters.isComplete() ? parameters : null;
     }
+
 
 }
