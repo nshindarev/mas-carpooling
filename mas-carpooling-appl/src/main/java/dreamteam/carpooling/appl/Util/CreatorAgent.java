@@ -98,10 +98,14 @@ public class CreatorAgent extends Agent {
                 }
 
                 agent.start();
+
+                Thread.sleep(delayAgents.intValue());
             }
 
         } catch (StaleProxyException spe) {
             spe.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }
