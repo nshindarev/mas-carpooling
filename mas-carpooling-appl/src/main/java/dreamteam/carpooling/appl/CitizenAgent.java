@@ -2,14 +2,22 @@ package dreamteam.carpooling.appl;
 
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
-import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversOffersBehaviour;
 
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
+import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
+import dreamteam.carpooling.appl.Util.MyCityGraph;
 import dreamteam.carpooling.appl.Util.Parser;
+
+import jade.core.AID;
 import jade.core.Agent;
+
 import org.jgrapht.Graph;
 import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
+
+import jade.domain.DFService;
+import jade.domain.FIPAException;
+
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +34,7 @@ public class CitizenAgent extends Agent {
     public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
 
     private Car car = null;
-    private Graph<String, MyWeightedEdge> city = new Parser().getCity();
+    private MyCityGraph<String, MyWeightedEdge> city = new Parser().getCity();
 
     private String start, finish;
     private List<MyWeightedEdge> wayWithMyCar = null;
@@ -41,6 +49,7 @@ public class CitizenAgent extends Agent {
     }
     public double getCurrentPrice(){ return  this.price;}
 
+    public List<AID> suitableDrivers = new LinkedList<>();
 
     @Override
     protected void setup() {
@@ -80,10 +89,10 @@ public class CitizenAgent extends Agent {
             getCostByMyCar();
         }
 
-        // Поведения для роли пассажира
-        addBehaviour(new HandleDriversOffersBehaviour(this, 3000));
-
         this.greed = Math.random() * 0.15;
+
+        // Поведения для роли пассажира
+        addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
     }
 
     public String getStart() {
@@ -122,4 +131,22 @@ public class CitizenAgent extends Agent {
         else sum = this.price;
         return sum;
     }
+
+    public MyCityGraph<String, MyWeightedEdge> getCity() {
+        return city;
+    }
+
+
+
+    @Override
+    protected void takeDown() {
+        // Deregister from the yellow pages
+        try {
+            DFService.deregister(this);
+        }
+        catch (FIPAException fe) {
+            fe.printStackTrace();
+        }
+    }
+
 }

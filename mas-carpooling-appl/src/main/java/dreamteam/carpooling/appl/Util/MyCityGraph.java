@@ -29,13 +29,22 @@ public class MyCityGraph<V,E> extends SimpleWeightedGraph<V,E> {
         return this.city_districts;
     }
 
+    public District getDistrictByName(String districtName) {
+        for (District district : this.city_districts) {
+            if (district.getDistrictName().equals(districtName)) {
+                return district;
+            }
+        }
+        return null;
+    }
+
     //TODO: обработать случай, где передаются вершины из другого района
     public void addCity_district(String district_name, List<String> vertexes){
        boolean b = true;
        try{
            for (String s:
                    vertexes) {
-               if(vertexes_used_in_districts.contains(s)) b = false;
+               //if(vertexes_used_in_districts.contains(s)) b = false;
            }
        }
        catch (NullPointerException ex){
