@@ -32,7 +32,7 @@ public class CreatorAgent extends Agent {
         if (countAgents == null)
             countAgents = countAgentsConst;
 
-        Parameters agentParameters = new Parameters();
+        Parameters agentParameters;
 
         ContainerController cc = getContainerController();
         try {

@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.Option;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.CommandLineParser;
@@ -58,6 +59,12 @@ public class Main {
                 if(countPar == null) {
                     logger.error("Не задан параметр {}", par);
                     params = false;
+                }
+
+                if (params) {
+                    // count_agents
+                    String ca = cl.getOptionValue(countAgents);
+                    parameters.setCountAgents(ca);
                 }
             }
         }
