@@ -30,14 +30,22 @@ public class Main {
     public static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     private static final String countAgents = "count_agents";
+    private static final String autoGenerateAgents = "auto_generate";
+    private static final String countDriver = "count_driver";
 
     public static void main(String[] args) {
         logger.info("Application started by {} class. ", Main.class.getName());
-        MainParameters countAgents = parseParameters(args);
+        MainParameters configParameters = parseParameters(args);
+
+        StringBuilder forCreator = new StringBuilder();
+        forCreator
+                .append(configParameters.getAutoGenerateAgents()).append(",")
+                .append(configParameters.getCountAgents()).append(",")
+                .append(configParameters.getСountDriver());
 
         jade.Boot.main(new String[] {
                 "-gui",
-                "god:dreamteam.carpooling.appl.Util.CreatorAgent(" + countAgents.getCountAgents() + ")"
+                "god:dreamteam.carpooling.appl.Util.CreatorAgent(" + forCreator.toString() + ")"
         });
 
         // в качестве параметра -> путь к файлу .gml от mas-carpooling
@@ -70,6 +78,8 @@ public class Main {
         Options options = new Options();
 
         options.addOption(countAgents, true, "Количество агентов в городе");
+        options.addOption(autoGenerateAgents, true, "Автоматическая генерация агентов или нет");
+        options.addOption(countDriver, true, "Количество агентов-водителей");
 
         MainParameters parameters = new MainParameters();
         boolean params = true;
@@ -78,7 +88,7 @@ public class Main {
 
         try {
             cl = parser.parse(options, args);
-            for (String par : new String[]{countAgents}) {
+            for (String par : new String[]{countAgents, autoGenerateAgents, countDriver}) {
                 String countPar = cl.getOptionValue(par);
 
                 if (countPar == null) {
@@ -90,6 +100,14 @@ public class Main {
                     // count_agents
                     String ca = cl.getOptionValue(countAgents);
                     parameters.setCountAgents(ca);
+
+                    // auto_generate
+                    String ag = cl.getOptionValue(autoGenerateAgents);
+                    parameters.setAutoGenerateAgents(ag);
+
+                    // countDriver
+                    String cd = cl.getOptionValue(countDriver);
+                    parameters.setСountDrivers(cd);
                 }
             }
         } catch (ParseException pe) {
