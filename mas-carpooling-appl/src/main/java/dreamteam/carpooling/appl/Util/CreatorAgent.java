@@ -27,6 +27,7 @@ public class CreatorAgent extends Agent {
         Integer countAgents = null;
         Integer countDrivers = null;
         Boolean isAutoGenerateAgents = true;
+        Integer delayAgents = null;
 
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
@@ -37,6 +38,7 @@ public class CreatorAgent extends Agent {
             }
             countAgents = Integer.parseInt(args[1].toString());
             countDrivers = Integer.parseInt(args[2].toString());
+            delayAgents = Integer.parseInt(args[3].toString());
         }
 
         if (countDrivers > countAgents){
