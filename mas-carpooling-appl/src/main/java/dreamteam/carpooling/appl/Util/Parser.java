@@ -7,10 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
- * Created by nshindarev on 02.04.17.
+ *  Парсер. Считывает город из файла. Город доступен по методу getCity()
  */
 
 public class Parser {
@@ -21,14 +22,18 @@ public class Parser {
     private File city_file;
     private VertexProvider<String> vertex_provider;
     private EdgeProvider<String, Integer> edge_provider;
-    private Graph<String, DefaultWeightedEdge> city;
+    private MyCityGraph<String, MyWeightedEdge> city;
+
 
     //public fields
-    public Graph<String, DefaultWeightedEdge> getCity (){
+    public MyCityGraph<String, MyWeightedEdge> getCity (){
             return this.city;
     }
 
-    //constructor
+    /**
+     *
+     * @param city_file путь к файлу от root-директории
+     */
     public Parser (File city_file){
     try{
         this.city_file = city_file;
@@ -51,15 +56,16 @@ public class Parser {
 
 
     public void parseCityFromFile(){
-        this.city = new SimpleWeightedGraph<String, DefaultWeightedEdge>(DefaultWeightedEdge.class);
+        this.city = new MyCityGraph<String, MyWeightedEdge>(MyWeightedEdge.class);
 
 
-        GmlImporter<String,DefaultWeightedEdge> importer =
+        GmlImporter<String,MyWeightedEdge> importer =
                 new GmlImporter<>(
                         (String label, Map<String, String> attributes)
                                  -> {return label;},
                         (String from, String to, String label, Map<String, String> attributes)
                                  -> { return city.getEdgeFactory().createEdge(from, to); });
+
 
 
         try{
