@@ -17,7 +17,7 @@ public class CreatorAgent extends Agent {
     private final Integer countAgentsConst = 5;
     private final Integer maxCapacityCarConst = 5;
     private final Integer maxCoefRandCost = 9;
-    private final Integer maxVertexRandCost = 30;
+    private final Integer maxVertexCity = 30;
 
     @Override
     protected void setup() {
@@ -48,14 +48,22 @@ public class CreatorAgent extends Agent {
                     costPerKm = null;
                     capacityCar = null;
                 }
-                Integer startVertex = random.nextInt(maxVertexRandCost - 1);
-                Integer endVertex = random.nextInt(maxVertexRandCost);
+                Integer startVertex = random.nextInt(maxVertexCity - 1);
+                Integer endVertex = random.nextInt(maxVertexCity);
 
                 agentParameters = new Parameters(String.valueOf(startVertex), String.valueOf(endVertex),
                         String.valueOf(capacityCar), String.valueOf(costPerKm));
 
-                AgentController agent  = cc.createNewAgent(nameAgent,  "dreamteam.carpooling.appl.CitizenAgent",
-                        new Object[] { agentParameters.getStartPath(), agentParameters.getFinishPath(), agentParameters.getCapacityPath(), agentParameters.getCostPerKmPathh() });
+                AgentController agent;
+
+                if (agentParameters.havCar()){
+                    agent  = cc.createNewAgent(nameAgent,  "dreamteam.carpooling.appl.CitizenAgent",
+                            new Object[] { agentParameters.getStartPath(), agentParameters.getFinishPath(), agentParameters.getCapacityPath(), agentParameters.getCostPerKmPathh() });
+                } else{
+                    agent  = cc.createNewAgent(nameAgent,  "dreamteam.carpooling.appl.CitizenAgent",
+                            new Object[] { agentParameters.getStartPath(), agentParameters.getFinishPath()});
+                }
+
                 agent.start();
             }
 

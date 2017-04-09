@@ -41,6 +41,11 @@ public class Parameters {
                 && costPerKmPath   != null;
     }
 
+    public boolean havCar() {
+        return capacityPath   != null
+                && costPerKmPath   != null;
+    }
+
 
     public final String getStartPath() {
         return startPath;
