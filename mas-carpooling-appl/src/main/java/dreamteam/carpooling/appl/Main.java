@@ -32,6 +32,7 @@ public class Main {
     private static final String countAgents = "count_agents";
     private static final String autoGenerateAgents = "auto_generate";
     private static final String countDriver = "count_driver";
+    private static final String delayAgents = "delay_agents";
 
     public static void main(String[] args) {
         logger.info("Application started by {} class. ", Main.class.getName());
@@ -41,7 +42,8 @@ public class Main {
         forCreator
                 .append(configParameters.getAutoGenerateAgents()).append(",")
                 .append(configParameters.getCountAgents()).append(",")
-                .append(configParameters.getСountDriver());
+                .append(configParameters.getСountDriver()).append(",")
+                .append(configParameters.getDelayAgents());
 
         jade.Boot.main(new String[] {
                 "-gui",
@@ -80,6 +82,7 @@ public class Main {
         options.addOption(countAgents, true, "Количество агентов в городе");
         options.addOption(autoGenerateAgents, true, "Автоматическая генерация агентов или нет");
         options.addOption(countDriver, true, "Количество агентов-водителей");
+        options.addOption(delayAgents, true, "Временная задержка при создании агентов");
 
         MainParameters parameters = new MainParameters();
         boolean params = true;
@@ -88,7 +91,7 @@ public class Main {
 
         try {
             cl = parser.parse(options, args);
-            for (String par : new String[]{countAgents, autoGenerateAgents, countDriver}) {
+            for (String par : new String[]{countAgents, autoGenerateAgents, countDriver, delayAgents}) {
                 String countPar = cl.getOptionValue(par);
 
                 if (countPar == null) {
@@ -108,6 +111,10 @@ public class Main {
                     // countDriver
                     String cd = cl.getOptionValue(countDriver);
                     parameters.setСountDrivers(cd);
+
+                    // delayAgents
+                    String da = cl.getOptionValue(delayAgents);
+                    parameters.setDelayAgents(da);
                 }
             }
         } catch (ParseException pe) {

@@ -9,25 +9,28 @@ import java.nio.file.Paths;
 public class MainParameters {
 
     //Параметры запуска приложения - количество агентов, автоматическая генерация или нет
-    // количество агентов с машинами
+    // количество агентов с машинами, время задержки при создании агента
     private String countAgents;
     private String autoGenerateAgents;
     private String countDriver;
+    private String delayAgents;
 
     public MainParameters() {
     }
 
-    public MainParameters(String countAgents, String autoGenerateAgents, String countDriver) {
+    public MainParameters(String countAgents, String autoGenerateAgents, String countDriver, String delayAgents) {
         this.countAgents = countAgents;
         this.autoGenerateAgents = autoGenerateAgents;
         this.countDriver = countDriver;
+        this.delayAgents = delayAgents;
     }
 
 
     public boolean isComplete() {
         return countAgents != null
                 & autoGenerateAgents != null
-                & countDriver != null;
+                & countDriver != null
+                & delayAgents != null;
     }
 
 
@@ -53,6 +56,14 @@ public class MainParameters {
 
     public final void setСountDrivers(String countDriver) {
         this.countDriver = countDriver;
+    }
+
+    public final String getDelayAgents() {
+        return delayAgents;
+    }
+
+    public final void setDelayAgents(String delayAgents) {
+        this.delayAgents = delayAgents;
     }
 
 }
