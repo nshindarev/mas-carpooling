@@ -10,6 +10,7 @@ import jade.domain.FIPAAgentManagement.Property;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class RegisterInYPBehaviour extends OneShotBehaviour {
         sd.setName("JADE-carpooling");
 
         List<MyWeightedEdge> route = ((CitizenAgent) myAgent).getCurrentRoute();
-        District[] districts = getDistrictsByRoute(route);
+        List<District> districts = getDistrictsByRoute(route);
 
         StringBuilder districtsParam = new StringBuilder();
         for (District district : districts) {
@@ -38,7 +39,7 @@ public class RegisterInYPBehaviour extends OneShotBehaviour {
 
         Property p = new Property();
         p.setName("districts");
-        p.setValue(districts);
+        p.setValue(districtsParam.toString());
         sd.addProperties(p);
 
         dfd.addServices(sd);
@@ -52,8 +53,19 @@ public class RegisterInYPBehaviour extends OneShotBehaviour {
         }
     }
 
-    private District[] getDistrictsByRoute(List<MyWeightedEdge> route) {
-        // TODO: определять районы по маршруту
-        return new District[0];
+    private List<District> getDistrictsByRoute(List<MyWeightedEdge> route) {
+        List<District> result = new ArrayList<>();
+
+        for (District district : ((CitizenAgent) myAgent).getCity().getCity_districts()) {
+            for (MyWeightedEdge edge : route) {
+                if (!result.contains(district) && (
+                        district.getVertexes().contains(edge.getSource().toString()) ||
+                        district.getVertexes().contains(edge.getTarget().toString()))) {
+                    result.add(district);
+                }
+            }
+        }
+
+        return result;
     }
 }
