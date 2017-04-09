@@ -30,7 +30,7 @@ public class Main {
 
         jade.Boot.main(new String[] {
                 "-gui",
-                "god:dreamteam.carpooling.appl.Util.CreatorAgent(" + countAgents + ")"
+                "god:dreamteam.carpooling.appl.Util.CreatorAgent(" + countAgents.getCountAgents() + ")"
         });
 
         // в качестве параметра -> путь к файлу .gml от mas-carpooling

@@ -17,7 +17,7 @@ public class CreatorAgent extends Agent {
     private final Integer countAgentsConst = 5;
     private final Integer maxCapacityCarConst = 5;
     private final Integer maxCoefRandCost = 9;
-    private final Integer maxVertexCity = 30;
+    private final Integer maxVertexCity = 11;
 
     @Override
     protected void setup() {
@@ -48,7 +48,7 @@ public class CreatorAgent extends Agent {
                     costPerKm = null;
                     capacityCar = null;
                 }
-                Integer startVertex = random.nextInt(maxVertexCity - 1);
+                Integer startVertex = random.nextInt(maxVertexCity - 2) + 1;
                 Integer endVertex = random.nextInt(maxVertexCity);
 
                 agentParameters = new Parameters(String.valueOf(startVertex), String.valueOf(endVertex),
