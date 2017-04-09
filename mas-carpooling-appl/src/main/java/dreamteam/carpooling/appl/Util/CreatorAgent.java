@@ -14,10 +14,10 @@ import org.slf4j.LoggerFactory;
 
 public class CreatorAgent extends Agent {
 
-    private final Integer countAgentsConst = 5;
+    private final Integer countAgentsDefault = 5;
     private final Integer maxCapacityCarConst = 5;
     private final Integer maxCoefRandCost = 9;
-    private final Integer maxVertexCity = 11;
+    private final Integer maxVertexCity = 11; //TODO связать с городом
 
     @Override
     protected void setup() {
@@ -30,7 +30,7 @@ public class CreatorAgent extends Agent {
         }
 
         if (countAgents == null)
-            countAgents = countAgentsConst;
+            countAgents = countAgentsDefault;
 
         Parameters agentParameters;
 
@@ -39,17 +39,12 @@ public class CreatorAgent extends Agent {
             for (int i = 0; i < countAgents; i++){
                 String nameAgent = "agent_" + i;
                 final Random random = new Random();
-                Integer capacityCar = random.nextInt(maxCapacityCarConst);
-                Integer costPerKm = capacityCar;
-                if (capacityCar != 0){
-                    costPerKm *= 1 + random.nextInt(maxCoefRandCost) / 10;
-                }
-                else {
-                    costPerKm = null;
-                    capacityCar = null;
-                }
-                Integer startVertex = random.nextInt(maxVertexCity - 2) + 1;
-                Integer endVertex = random.nextInt(maxVertexCity);
+
+                Integer capacityCar = random.nextInt(maxCapacityCarConst) + 1; // вместимость машины от 1 до maxCapacityCarConst
+                Integer costPerKm = capacityCar * (random.nextInt(maxCoefRandCost) + 1);
+
+                Integer startVertex = random.nextInt(maxVertexCity - 1) + 1;
+                Integer endVertex = random.nextInt(maxVertexCity - startVertex) + startVertex + 1;
 
                 agentParameters = new Parameters(String.valueOf(startVertex), String.valueOf(endVertex),
                         String.valueOf(capacityCar), String.valueOf(costPerKm));
