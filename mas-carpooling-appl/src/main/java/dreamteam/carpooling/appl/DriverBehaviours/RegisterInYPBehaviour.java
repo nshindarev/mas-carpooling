@@ -46,7 +46,7 @@ public class RegisterInYPBehaviour extends OneShotBehaviour {
 
         try {
             DFService.register(myAgent, dfd);
-            CitizenAgent.logger.info("{} is registered as a driver", myAgent.getAID().getName());
+            CitizenAgent.logger.info("{} is registered as a driver", myAgent.getAID().getLocalName());
         }
         catch (FIPAException fe) {
             fe.printStackTrace();

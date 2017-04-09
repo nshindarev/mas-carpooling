@@ -25,7 +25,7 @@ public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-        CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getName());
+        // CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getLocalName());
 
         try {
             // Build the description used as template for the search
@@ -55,8 +55,8 @@ public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
                                         && districtsAreSuitable(districts.getValue().toString().split(","))) {
                                     myCitizenAgent.suitableDrivers.add(provider);
                                     CitizenAgent.logger.info("{} found new suitable driver: {}",
-                                            myAgent.getAID().getName(),
-                                            provider.getName());
+                                            myAgent.getAID().getLocalName(),
+                                            provider.getLocalName());
                                 }
                             }
                         }
