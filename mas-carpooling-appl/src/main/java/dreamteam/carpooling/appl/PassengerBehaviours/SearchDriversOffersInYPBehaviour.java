@@ -72,23 +72,34 @@ public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
     private boolean districtsAreSuitable(String[] districts) {
         boolean foundStartDistrict  = false;
         boolean foundFinishDistrict = false;
+        boolean districtIsSuitable = false;
 
         String startVertex  = myCitizenAgent.getStart();
         String finishVertex = myCitizenAgent.getFinish();
 
-        for (String name: districts) {
+        for (String name: districts){
             District district = myCitizenAgent.getCity().getDistrictByName(name);
-            if (!foundStartDistrict) {
-                foundStartDistrict = district.isInDistrict(startVertex);
-            }
-            if (!foundFinishDistrict) {
-                foundFinishDistrict = district.isInDistrict(finishVertex);
-            }
-            if (foundStartDistrict && foundFinishDistrict) {
-                break;
-            }
-        }
 
-        return foundStartDistrict && foundFinishDistrict;
+            if(!foundStartDistrict){
+                foundStartDistrict = district.isInDistrict(startVertex);
+
+                /**
+                 * если нашли старт в районе, финиш тоже ищем в нём
+                 */
+                if(foundStartDistrict){
+                    foundFinishDistrict = district.isInDistrict(finishVertex);
+                    districtIsSuitable = foundFinishDistrict;
+                }
+            }
+            /**
+             * если старт уже найден, ищем только финиш
+             */
+            else if(!foundFinishDistrict){
+                foundFinishDistrict = district.isInDistrict(finishVertex);
+                districtIsSuitable = foundFinishDistrict;
+            }
+            if (districtIsSuitable) break;
+        }
+        return  districtIsSuitable;
     }
 }
