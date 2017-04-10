@@ -72,7 +72,6 @@ public class Parser {
 
         try{
             importer.importGraph(this.city, this.city_file);
-            logger.info("");
         }
         catch (ImportException ex){
             logger.error("сломалось при чтении из файла " + city_file.getPath());

@@ -13,4 +13,11 @@ public class MyWeightedEdge extends DefaultWeightedEdge {
         return this.getWeight();
     }
 
+    public Object getSource() {
+        return super.getSource();
+    }
+
+    public Object getTarget() {
+        return super.getTarget();
+    }
 }

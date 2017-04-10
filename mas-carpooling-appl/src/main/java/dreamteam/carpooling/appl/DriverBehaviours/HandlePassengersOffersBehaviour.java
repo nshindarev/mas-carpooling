@@ -15,6 +15,6 @@ public class HandlePassengersOffersBehaviour extends TickerBehaviour {
 
     @Override
     protected void onTick() {
-        CitizenAgent.logger.info("{} is handling a proposal from passenger", myAgent.getAID().getName());
+        //CitizenAgent.logger.info("{} is handling a proposal from passenger", myAgent.getAID().getLocalName());
     }
 }

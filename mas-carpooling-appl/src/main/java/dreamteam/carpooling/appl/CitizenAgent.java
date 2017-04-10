@@ -10,7 +10,8 @@ import dreamteam.carpooling.appl.Util.Parser;
 
 import jade.core.AID;
 import jade.core.Agent;
-
+import jade.domain.DFService;
+import jade.domain.FIPAException;
 import org.jgrapht.Graph;
 import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -54,7 +55,7 @@ public class CitizenAgent extends Agent {
     @Override
     protected void setup() {
         super.setup();
-        logger.info("Hello! Agent {} is ready.", getAID().getName());
+        //logger.info("Hello! Agent {} is ready.", getAID().getLocalName());
 
         Object[] args = getArguments();
 
@@ -64,10 +65,10 @@ public class CitizenAgent extends Agent {
                 !args[0].toString().equals(args[1].toString())) {
             this.start  = args[0].toString();
             this.finish = args[1].toString();
-            logger.info("Agent {}: start - node {}, destination - node {}",
-                    getAID().getName(), this.getStart(), this.getFinish());
+            logger.info("{}: start - node {}, destination - node {}",
+                    getAID().getLocalName(), this.getStart(), this.getFinish());
         } else { // Если заданы неправильно, убиваем агента
-            logger.info("Agent {} has invalid parameters", getAID().getName());
+            logger.info("{} has invalid parameters", getAID().getLocalName());
             this.doDelete();
             return;
         }
@@ -75,8 +76,8 @@ public class CitizenAgent extends Agent {
         // Смотрим, есть ли машина
         if (args.length == 4) {
             this.car = new Car(Byte.parseByte(args[2].toString()), Float.parseFloat(args[3].toString()));
-            logger.info("Agent {} has car with capacity {} and cost per km {}",
-                    getAID().getName(), car.getCapacity(), car.getCostPerKilometer());
+            logger.info("{} has car with capacity {} and cost per km {}",
+                    getAID().getLocalName(), car.getCapacity(), car.getCostPerKilometer());
         }
 
         // Поведения для роли водителя
