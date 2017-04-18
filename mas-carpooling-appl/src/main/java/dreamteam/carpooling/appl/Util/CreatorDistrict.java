@@ -27,9 +27,8 @@ public class CreatorDistrict {
         }
     }
 
-    public CreatorDistrict(){
-        Parser parser = new Parser();
-        parser.parseCityFromFile();
+    public CreatorDistrict(Parser parser){
+
         MyCityGraph<String, MyWeightedEdge> city = parser.getCity();
 
         //всего вершин, всего районов, вершин в районе (примерно), номер района
