@@ -6,6 +6,8 @@ import org.jgrapht.graph.DefaultWeightedEdge;
  * Created by nshindarev on 09.04.17.
  */
 public class MyWeightedEdge extends DefaultWeightedEdge {
+    private  Boolean used = false;
+
     public MyWeightedEdge(){
         super();
     }
@@ -20,4 +22,13 @@ public class MyWeightedEdge extends DefaultWeightedEdge {
     public Object getTarget() {
         return super.getTarget();
     }
+
+    public final Boolean getUsed() {
+        return used;
+    }
+
+    public final void setUsed(Boolean used) {
+        this.used = used;
+    }
+
 }

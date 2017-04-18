@@ -1,6 +1,7 @@
 package dreamteam.carpooling.appl;
 
 
+import dreamteam.carpooling.appl.Util.CreatorDistrict;
 import dreamteam.carpooling.appl.Util.MyCityGraph;
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.Util.Parser;
@@ -50,29 +51,6 @@ public class Main {
                 "god:dreamteam.carpooling.appl.Util.CreatorAgent(" + forCreator.toString() + ")"
         });
 
-        // в качестве параметра -> путь к файлу .gml от mas-carpooling
-        Parser parser = new Parser();
-
-        MyCityGraph<String, MyWeightedEdge> city = parser.getCity();
-
-        city.addCity_district("D1", new LinkedList<String>() {{
-            add("1");
-            add("2");
-            add("3");
-            add("4");
-        }});
-
-        city.addCity_district("D1", new LinkedList<String>() {{
-            add("5");
-            add("6");
-            add("7");
-            add("8");
-        }});
-
-        city.getCity_districts().toString();
-
-        logger.debug(city.getCity_districts().toString());
-        logger.isDebugEnabled();
     }
 
 

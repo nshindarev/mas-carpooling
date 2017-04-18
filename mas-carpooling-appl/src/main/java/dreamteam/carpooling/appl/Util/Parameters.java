@@ -1,8 +1,5 @@
 package dreamteam.carpooling.appl.Util;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 /**
  * Created by nbirillo on 08.04.17.
  */
@@ -11,71 +8,71 @@ public class Parameters {
     //Параметры агента - стартовая вершина, конечная вершина,
     // вместимость машины, стоимость проезда за км
 
-    private String startPath;
-    private String finishPath;
-    private String capacityPath;
-    private String costPerKmPath;
+    private String startVertex;
+    private String finishVertex;
+    private String capacity;
+    private String costPerKm;
 
     public Parameters() {
     }
 
-    public Parameters(String startPath, String finishPath, String capacityPath, String costPerKmPath) {
-        this.startPath = startPath;
-        this.finishPath = finishPath;
-        this.capacityPath = capacityPath;
-        this.costPerKmPath = costPerKmPath;
+    public Parameters(String startVertex, String finishVertex, String capacity, String costPerKm) {
+        this.startVertex = startVertex;
+        this.finishVertex = finishVertex;
+        this.capacity = capacity;
+        this.costPerKm = costPerKm;
     }
 
-    public Parameters(String startPath, String finishPath) {
-        this.startPath = startPath;
-        this.finishPath = finishPath;
-        this.capacityPath = null;
-        this.costPerKmPath = null;
+    public Parameters(String startVertex, String finishVertex) {
+        this.startVertex = startVertex;
+        this.finishVertex = finishVertex;
+        this.capacity = null;
+        this.costPerKm = null;
     }
 
 
     public boolean isComplete() {
-        return startPath != null
-                && finishPath != null
-                && capacityPath   != null
-                && costPerKmPath   != null;
+        return startVertex != null
+                && finishVertex != null
+                && capacity != null
+                && costPerKm != null;
     }
 
     public boolean havCar() {
-        return !capacityPath.equals("0");
+        return !capacity.equals("0");
     }
 
 
-    public final String getStartPath() {
-        return startPath;
+    public final String getStartVertex() {
+        return startVertex;
     }
 
-    public final void setStartPath(String startPath) {
-        this.startPath = startPath;
+    public final void setStartVertex(String startVertex) {
+        this.startVertex = startVertex;
     }
 
-    public final String getFinishPath() {
-        return finishPath;
+    public final String getFinishVertex() {
+        return finishVertex;
     }
 
-    public final void setFinishPath(String finishPath) {
-        this.finishPath = finishPath;
+    public final void setFinishVertex(String finishVertex) {
+        this.finishVertex = finishVertex;
     }
 
-    public final String getCapacityPath() {
-        return capacityPath;
+    public final String getCapacity() {
+        return capacity;
     }
 
-    public final void setCapacityPath(String destPath) {
-        this.capacityPath = capacityPath;
+    public final void setCapacity(String destPath) {
+        this.capacity = capacity;
     }
 
     public final String getCostPerKmPathh() {
-        return costPerKmPath;
+        return costPerKm;
     }
 
-    public final void setCostPerKmPath(String costPerKmPath) {
-        this.costPerKmPath = costPerKmPath;
+    public final void setCostPerKm(String costPerKm) {
+        this.costPerKm = costPerKm;
     }
 
 }

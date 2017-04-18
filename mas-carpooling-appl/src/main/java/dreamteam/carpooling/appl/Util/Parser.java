@@ -78,36 +78,10 @@ public class Parser {
         }
     }
 
-    // TODO: подумать, как нормально добавлять районы для рандомного города
     private void setDistricts() {
-        city.addCity_district("D1", new LinkedList<String>() {{
-            add("1");
-            add("2");
-            add("3");
-            add("5");
-            add("6");
-            add("7");
-        }});
-
-        city.addCity_district("D2", new LinkedList<String>() {{
-            add("2");
-            add("4");
-            add("5");
-        }});
-
-        city.addCity_district("D3", new LinkedList<String>() {{
-            add("5");
-            add("6");
-            add("7");
-            add("8");
-            add("9");
-        }});
-
-        city.addCity_district("D4", new LinkedList<String>() {{
-            add("8");
-            add("10");
-            add("11");
-            add("12");
-        }});
+        List<District> districts = new CreatorDistrict(this).getDistricts();
+        for (District district : districts) {
+            city.addCity_district(district.getDistrictName(), district.getVertexes());
+        }
     }
 }

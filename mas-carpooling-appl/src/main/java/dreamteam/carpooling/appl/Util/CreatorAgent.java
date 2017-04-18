@@ -7,11 +7,6 @@ import jade.wrapper.StaleProxyException;
 
 import  java.util.Random;
 
-import dreamteam.carpooling.appl.Util.Parameters;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class CreatorAgent extends Agent {
 
     private final Integer countAgentsDefault = 5;
@@ -97,10 +92,10 @@ public class CreatorAgent extends Agent {
 
                 if (agentParameters.havCar()){
                     agent  = cc.createNewAgent(nameAgent,  "dreamteam.carpooling.appl.CitizenAgent",
-                            new Object[] { agentParameters.getStartPath(), agentParameters.getFinishPath(), agentParameters.getCapacityPath(), agentParameters.getCostPerKmPathh() });
+                            new Object[] { agentParameters.getStartVertex(), agentParameters.getFinishVertex(), agentParameters.getCapacity(), agentParameters.getCostPerKmPathh() });
                 } else{
                     agent  = cc.createNewAgent(nameAgent,  "dreamteam.carpooling.appl.CitizenAgent",
-                            new Object[] { agentParameters.getStartPath(), agentParameters.getFinishPath()});
+                            new Object[] { agentParameters.getStartVertex(), agentParameters.getFinishVertex()});
                 }
 
                 agent.start();
