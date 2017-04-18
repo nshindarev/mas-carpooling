@@ -12,12 +12,18 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.util.leap.Iterator;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
- * Обработка предложений от водителей
+ * Поиск предложений от водителей. Когда пассажир находит подходящего водителя,
+ * он записывает его в персональный список.
  */
 public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
 
     private CitizenAgent myCitizenAgent = (CitizenAgent) myAgent;
+
+    public List<AID> addedDrivers = new LinkedList<>();
 
     public SearchDriversOffersInYPBehaviour(Agent a, long period) {
         super(a, period);
@@ -51,9 +57,10 @@ public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
                                 Property districts = (Property) properties.next();
                                 // Если маршрут подходит и этого водителя ещё нет в нашем списке, добавляем его
                                 if (!provider.equals(myAgent.getAID())
-                                        && !myCitizenAgent.suitableDrivers.contains(provider)
+                                        && !addedDrivers.contains(provider)
                                         && districtsAreSuitable(districts.getValue().toString().split(","))) {
                                     myCitizenAgent.suitableDrivers.add(provider);
+                                    addedDrivers.add(provider);
                                     CitizenAgent.logger.info("{} found new suitable driver: {}",
                                             myAgent.getAID().getLocalName(),
                                             provider.getLocalName());
