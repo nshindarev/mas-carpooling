@@ -39,19 +39,43 @@ public class CitizenAgent extends Agent {
 
     private String start, finish;
     private List<MyWeightedEdge> wayWithMyCar = null;
-    private double price = Double.MAX_VALUE;
+    private List<MyWeightedEdge> myCurrentWay = null;
+    /**
+     *
+     */
+    private double price = 1;
     /**
      * коэфициент жадности для водителя
      */
     private double greed;
 
+
+
+    // список агентов-попутчиков
+    public List<AID> companions = new LinkedList<>();
+
+    public int getCarCapacity (){ return this.car.getCapacity(); }
     public List<MyWeightedEdge> getCurrentRoute(){
-        return  this.wayWithMyCar;
+        return myCurrentWay;
+    }
+    public void setNewRoad(Iterable<MyWeightedEdge> input){
+        this.myCurrentWay = new LinkedList<MyWeightedEdge>();
+        for (MyWeightedEdge e:
+             input) {
+            this.myCurrentWay.add(e);
+        }
     }
     public double getCurrentPrice(){ return  this.price;}
 
     public List<AID> suitableDrivers = new LinkedList<>();
 
+    public String getStart()  {
+        return start;
+    }
+    public String getFinish() {
+        return finish;
+    }
+    public double getGreed()  { return greed; }
     @Override
     protected void setup() {
         super.setup();
@@ -82,26 +106,18 @@ public class CitizenAgent extends Agent {
 
         // Поведения для роли водителя
         if (car != null) {
-            addBehaviour(new RegisterInYPBehaviour());
-            addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
-
             this.wayWithMyCar = null;
             getWayByMyCar();
             getCostByMyCar();
+
+            addBehaviour(new RegisterInYPBehaviour());
+            addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
         }
 
         this.greed = Math.random() * 0.15;
 
         // Поведения для роли пассажира
         addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
-    }
-
-    public String getStart() {
-        return start;
-    }
-
-    public String getFinish() {
-        return finish;
     }
 
     /**
@@ -113,12 +129,22 @@ public class CitizenAgent extends Agent {
         if (this.wayWithMyCar == null) {
             wayWithMyCar = new LinkedList<>();
             this.wayWithMyCar =  DijkstraShortestPath.findPathBetween(this.city, start, finish);
+
+            if(myCurrentWay == null){
+                myCurrentWay = wayWithMyCar;
+            }
             return this.wayWithMyCar;
         }
         else{
             return this.wayWithMyCar;
         }
+
     }
+
+    /**
+     * получить стоимость маршрута на собственном авто
+     * @return
+     */
     public double getCostByMyCar(){
         double sum = 0;
         if (this.price == Double.MAX_VALUE){
@@ -132,7 +158,6 @@ public class CitizenAgent extends Agent {
         else sum = this.price;
         return sum;
     }
-
     public MyCityGraph<String, MyWeightedEdge> getCity() {
         return city;
     }
