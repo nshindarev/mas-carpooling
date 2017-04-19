@@ -3,6 +3,7 @@ package dreamteam.carpooling.appl;
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 
+import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversListBehaviour;
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 import dreamteam.carpooling.appl.Util.MyCityGraph;
@@ -106,18 +107,20 @@ public class CitizenAgent extends Agent {
 
         // Поведения для роли водителя
         if (car != null) {
+            addBehaviour(new RegisterInYPBehaviour());
+            addBehaviour(new HandlePassengersOffersBehaviour());
+
             this.wayWithMyCar = null;
             getWayByMyCar();
             getCostByMyCar();
 
-            addBehaviour(new RegisterInYPBehaviour());
-            addBehaviour(new HandlePassengersOffersBehaviour(this, 3000));
         }
 
         this.greed = Math.random() * 0.15;
 
         // Поведения для роли пассажира
         addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
+        addBehaviour(new HandleDriversListBehaviour(this, 1000));
     }
 
     /**
