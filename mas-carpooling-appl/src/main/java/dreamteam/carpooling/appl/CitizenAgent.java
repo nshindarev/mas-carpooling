@@ -15,15 +15,17 @@ import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import org.jgrapht.Graph;
-import org.jgrapht.alg.BidirectionalDijkstraShortestPath;
-import org.jgrapht.alg.DijkstraShortestPath;
+import org.jgrapht.GraphPath;
 
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 
+import org.jgrapht.alg.FloydWarshallShortestPaths;
 import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.GraphWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import sun.jvm.hotspot.utilities.IntegerEnum;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -46,12 +48,14 @@ public class CitizenAgent extends Agent {
      *   myCurrentWay  --- путь, который проделаем, заезжая за попутчиками
      *   shortestPaths --- перечень всех кратчайших путей между всеми точками города
      */
-    private List<MyWeightedEdge> wayWithMyCar = null;
-    private List<MyWeightedEdge> myCurrentWay = null;
-
+    private GraphPath<String, MyWeightedEdge> wayWithMyCar = null;
+    private GraphPath<String, MyWeightedEdge> myCurrentWay = null;
+    private FloydWarshallShortestPaths<String, MyWeightedEdge> shortestPaths = City.getShortestPaths();
 
     //TODO: переделать счетчик цен
     private double price = 1;
+
+
     /**
      *   greed --- коэфициент жадности для водителя
      */
@@ -59,27 +63,38 @@ public class CitizenAgent extends Agent {
 
 
     /**
-     * companions      --- ID попутчиков
-     * offersPool      --- список заявок на поездку от других пассажиров
-     * suitableDrivers --- ID водителей, которые нам подходят
+     *  companions      --- ID попутчиков
+     *  offersPool      --- список заявок на поездку от других пассажиров
+     *  suitableDrivers --- ID водителей, которые нам подходят
      */
     public List<AID> companions = new LinkedList<>();
     public List<Offer> offersPool = new LinkedList<>();
     public List<AID> suitableDrivers = new LinkedList<>();
 
+
     /**
      *   get/set
      */
+    public double countPrice (Iterable<MyWeightedEdge> way){
+
+        double rez = 0;
+        for (MyWeightedEdge edge:
+             way) {
+            rez += edge.get_weight();
+        }
+        return rez;
+    }
     public int getCarCapacity (){ return this.car.getCapacity(); }
-    public List<MyWeightedEdge> getCurrentRoute(){
+    public GraphPath<String, MyWeightedEdge> getCurrentRoute(){
         return myCurrentWay;
     }
-    public void setNewRoad(Iterable<MyWeightedEdge> input){
-        this.myCurrentWay = new LinkedList<MyWeightedEdge>();
-        for (MyWeightedEdge e:
-             input) {
-            this.myCurrentWay.add(e);
-        }
+
+    /**
+     * метод, обновляющий путь для водителя
+     * @param input список ребер, через которые проедет водитель
+     */
+    public void setNewRoad(List<MyWeightedEdge> input){
+        this.myCurrentWay = new GraphWalk<String, MyWeightedEdge>(city, start, finish, input, this.countPrice(input));
     }
 
 
@@ -136,7 +151,10 @@ public class CitizenAgent extends Agent {
         // Поведения для роли пассажира
         addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
         addBehaviour(new HandleDriversListBehaviour(this, 1000));
+
+        logger.info("");
     }
+
 
 
 
@@ -147,10 +165,9 @@ public class CitizenAgent extends Agent {
      * на собственном автомобиле
      * @return результат работы алгоритма Дейкстры
      */
-     public List<MyWeightedEdge> getWayByMyCar(){
+     public GraphPath<String, MyWeightedEdge> getWayByMyCar(){
         if (this.wayWithMyCar == null) {
-            wayWithMyCar = new LinkedList<>();
-            this.wayWithMyCar =  DijkstraShortestPath.findPathBetween(this.city, start, finish);
+            this.wayWithMyCar = shortestPaths.getShortestPath(start, finish);
 
             if(myCurrentWay == null){
                 myCurrentWay = wayWithMyCar;
@@ -171,7 +188,7 @@ public class CitizenAgent extends Agent {
         double sum = 0;
         if (this.price == Double.MAX_VALUE){
             for (MyWeightedEdge e:
-                 getWayByMyCar()) {
+                 getWayByMyCar().getEdgeList()) {
                 sum += e.get_weight();
             }
             sum *= car.getCapacity();

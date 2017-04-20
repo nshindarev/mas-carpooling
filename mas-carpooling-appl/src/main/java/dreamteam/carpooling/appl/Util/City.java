@@ -1,5 +1,7 @@
 package dreamteam.carpooling.appl.Util;
 
+import org.jgrapht.alg.FloydWarshallShortestPaths;
+
 import java.io.File;
 
 /**
@@ -8,18 +10,21 @@ import java.io.File;
 public final class City{
 
     private static MyCityGraph<String, MyWeightedEdge> city;
+    private static FloydWarshallShortestPaths<String, MyWeightedEdge> shortestPaths;
+
 
     private City(){
 
     }
     public static void createCity(){
         City.city = new Parser().getCity();
-    }
-    public static void createCity(File file){
-        City.city = new Parser(file).getCity();
+        City.shortestPaths = new FloydWarshallShortestPaths<>(city);
     }
 
     public static MyCityGraph<String, MyWeightedEdge> getCity (){
         return city;
+    }
+    public static FloydWarshallShortestPaths<String, MyWeightedEdge> getShortestPaths (){
+        return shortestPaths;
     }
 }

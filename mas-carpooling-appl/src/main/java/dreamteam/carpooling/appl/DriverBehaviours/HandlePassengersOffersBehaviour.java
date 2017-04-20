@@ -105,7 +105,7 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
         LinkedList<MyWeightedEdge> newRoute = new LinkedList<>();
 
        for (MyWeightedEdge road_in_route:
-             myCitizenAgent.getCurrentRoute()) {
+             myCitizenAgent.getCurrentRoute().getEdgeList()) {
 
             if(road_in_route.getSource().equals(start) ||
                     road_in_route.getTarget().equals(start)){
@@ -121,7 +121,7 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
         if (found_start_in_route && found_finish_in_route){
 
             for (MyWeightedEdge edge_in_route:
-                 myCitizenAgent.getCurrentRoute()) {
+                 myCitizenAgent.getCurrentRoute().getEdgeList()) {
               price += edge_in_route.get_weight();
             }
             greed_value = price * myCitizenAgent.getGreed();
@@ -138,7 +138,7 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
             }
 
             for (MyWeightedEdge edge_in_route:
-                    myCitizenAgent.getCurrentRoute()) {
+                    myCitizenAgent.getCurrentRoute().getEdgeList()) {
                 price += edge_in_route.get_weight();
             }
 
@@ -164,7 +164,7 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
             }
 
             for (MyWeightedEdge edge_in_route:
-                    myCitizenAgent.getCurrentRoute()) {
+                    myCitizenAgent.getCurrentRoute().getEdgeList()) {
                 price += edge_in_route.get_weight();
             }
 
@@ -177,7 +177,7 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
         else if (!found_finish_in_route){
 
            for (MyWeightedEdge edge_in_route:
-                    myCitizenAgent.getCurrentRoute()) {
+                    myCitizenAgent.getCurrentRoute().getEdgeList()) {
                 price += edge_in_route.get_weight();
             }
             for (MyWeightedEdge till_finish_point:

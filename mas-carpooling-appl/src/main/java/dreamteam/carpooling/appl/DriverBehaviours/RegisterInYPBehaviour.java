@@ -9,6 +9,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.Property;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
+import org.jgrapht.GraphPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +29,8 @@ public class RegisterInYPBehaviour extends OneShotBehaviour {
         sd.setType("carpooling");
         sd.setName("JADE-carpooling");
 
-        List<MyWeightedEdge> route = ((CitizenAgent) myAgent).getCurrentRoute();
-        List<District> districts = getDistrictsByRoute(route);
+        GraphPath<String, MyWeightedEdge> route = ((CitizenAgent) myAgent).getCurrentRoute();
+        List<District> districts = getDistrictsByRoute(route.getEdgeList());
 
         StringBuilder districtsParam = new StringBuilder();
         for (District district : districts) {
