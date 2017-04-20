@@ -19,6 +19,12 @@ public class CreatorAgent extends Agent {
 
         maxVertexCity = new Parser().getCity().vertexSet().size();
 
+        /**
+         *   для доступа агентов к карте через статическое поле
+         */
+
+        City.createCity();
+
         Integer countAgents = null;
         Integer countDrivers = null;
         Boolean isAutoGenerateAgents = true;

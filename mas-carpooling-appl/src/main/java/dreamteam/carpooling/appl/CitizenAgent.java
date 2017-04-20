@@ -4,6 +4,7 @@ import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviou
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 
 import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversListBehaviour;
+import dreamteam.carpooling.appl.Util.City;
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 import dreamteam.carpooling.appl.Util.MyCityGraph;
@@ -36,25 +37,39 @@ public class CitizenAgent extends Agent {
     public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
 
     private Car car = null;
-    private MyCityGraph<String, MyWeightedEdge> city = new Parser().getCity();
-
     private String start, finish;
+    private MyCityGraph<String, MyWeightedEdge> city = City.getCity();
+
+
+    /**
+     *   wayWithMyCar  --- кратчайший путь на собственной машине
+     *   myCurrentWay  --- путь, который проделаем, заезжая за попутчиками
+     *   shortestPaths --- перечень всех кратчайших путей между всеми точками города
+     */
     private List<MyWeightedEdge> wayWithMyCar = null;
     private List<MyWeightedEdge> myCurrentWay = null;
-    /**
-     *
-     */
+
+
+    //TODO: переделать счетчик цен
     private double price = 1;
     /**
-     * коэфициент жадности для водителя
+     *   greed --- коэфициент жадности для водителя
      */
     private double greed;
 
 
-
-    // список агентов-попутчиков
+    /**
+     * companions      --- ID попутчиков
+     * offersPool      --- список заявок на поездку от других пассажиров
+     * suitableDrivers --- ID водителей, которые нам подходят
+     */
     public List<AID> companions = new LinkedList<>();
+    public List<Offer> offersPool = new LinkedList<>();
+    public List<AID> suitableDrivers = new LinkedList<>();
 
+    /**
+     *   get/set
+     */
     public int getCarCapacity (){ return this.car.getCapacity(); }
     public List<MyWeightedEdge> getCurrentRoute(){
         return myCurrentWay;
@@ -66,9 +81,7 @@ public class CitizenAgent extends Agent {
             this.myCurrentWay.add(e);
         }
     }
-    public double getCurrentPrice(){ return  this.price;}
 
-    public List<AID> suitableDrivers = new LinkedList<>();
 
     public String getStart()  {
         return start;
@@ -77,6 +90,8 @@ public class CitizenAgent extends Agent {
         return finish;
     }
     public double getGreed()  { return greed; }
+
+
     @Override
     protected void setup() {
         super.setup();
@@ -123,12 +138,16 @@ public class CitizenAgent extends Agent {
         addBehaviour(new HandleDriversListBehaviour(this, 1000));
     }
 
+
+
+
+
     /**
      * Расчет оптимального алгоритма следования от старта к финишу
      * на собственном автомобиле
      * @return результат работы алгоритма Дейкстры
      */
-    public List<MyWeightedEdge> getWayByMyCar(){
+     public List<MyWeightedEdge> getWayByMyCar(){
         if (this.wayWithMyCar == null) {
             wayWithMyCar = new LinkedList<>();
             this.wayWithMyCar =  DijkstraShortestPath.findPathBetween(this.city, start, finish);
@@ -178,4 +197,18 @@ public class CitizenAgent extends Agent {
         }
     }
 
+}
+
+class Offer {
+
+    public String start, finish;
+    public double price;
+    public AID id;
+
+    public Offer(String start, String finish, double price, AID id){
+        this.id = id;
+        this.start = start;
+        this.finish = finish;
+        this.price = price;
+    }
 }
