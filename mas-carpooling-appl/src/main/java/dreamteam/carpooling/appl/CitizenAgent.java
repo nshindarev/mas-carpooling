@@ -1,14 +1,12 @@
 package dreamteam.carpooling.appl;
 
+import dreamteam.carpooling.appl.DriverBehaviours.CheckPassengerPoolBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 
 import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversListBehaviour;
-import dreamteam.carpooling.appl.Util.City;
-import dreamteam.carpooling.appl.Util.MyWeightedEdge;
+import dreamteam.carpooling.appl.Util.*;
 import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
-import dreamteam.carpooling.appl.Util.MyCityGraph;
-import dreamteam.carpooling.appl.Util.Offer;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -38,7 +36,7 @@ public class CitizenAgent extends Agent {
 
     public static final Logger logger = LoggerFactory.getLogger(CitizenAgent.class);
 
-    private Car car = null;
+    public Car car = null;
     private String start, finish;
     private MyCityGraph<String, MyWeightedEdge> city = City.getCity();
 
@@ -52,7 +50,7 @@ public class CitizenAgent extends Agent {
     private GraphPath<String, MyWeightedEdge> myCurrentWay = null;
     private FloydWarshallShortestPaths<String, MyWeightedEdge> shortestPaths = City.getShortestPaths();
 
-    //TODO: переделать счетчик цен
+   // TODO: что-то где-то из-за такого счетчика может сломаться
     private double price = 1;
 
 
@@ -61,7 +59,8 @@ public class CitizenAgent extends Agent {
      *   decided_to_drive   --- водитель принял решение ехать на своей машине
      */
     private double  greed;
-    private boolean decided_to_drive = false;
+    public boolean decided_to_drive = false;
+
 
     /**
      *  companions      --- ID попутчиков
@@ -70,8 +69,8 @@ public class CitizenAgent extends Agent {
      */
     public List<AID> companions = new LinkedList<>();
     public List<Offer> offersPool = new LinkedList<>();
+    public List<Offer> best_offer = new LinkedList<>();
     public List<AID> suitableDrivers = new LinkedList<>();
-
 
     /**
      *   get/set
@@ -99,6 +98,7 @@ public class CitizenAgent extends Agent {
     }
 
 
+    public double getPrice() { return price; }
     public String getStart()  {
         return start;
     }
@@ -106,6 +106,7 @@ public class CitizenAgent extends Agent {
         return finish;
     }
     public double getGreed()  { return greed; }
+    public List<Offer> getBestOffer() { return best_offer; }
 
 
     @Override
@@ -140,6 +141,7 @@ public class CitizenAgent extends Agent {
         if (car != null) {
             addBehaviour(new RegisterInYPBehaviour());
             addBehaviour(new HandlePassengersOffersBehaviour());
+            addBehaviour(new CheckPassengerPoolBehaviour());
 
             this.wayWithMyCar = null;
             getWayByMyCar();
@@ -160,7 +162,7 @@ public class CitizenAgent extends Agent {
     /**
      * Расчет оптимального алгоритма следования от старта к финишу
      * на собственном автомобиле
-     * @return результат работы алгоритма Дейкстры
+     * @return смотрим в таблицу результатов Флойда-Уоршелла
      */
      public GraphPath<String, MyWeightedEdge> getWayByMyCar(){
         if (this.wayWithMyCar == null) {
@@ -178,7 +180,7 @@ public class CitizenAgent extends Agent {
     }
 
     /**
-     * получить стоимость маршрута на собственном авто
+     * получить стоимость маршрута на собственном авто по кратчайшему пути
      * @return
      */
     public double getCostByMyCar(){
@@ -188,7 +190,7 @@ public class CitizenAgent extends Agent {
                  getWayByMyCar().getEdgeList()) {
                 sum += e.get_weight();
             }
-            sum *= car.getCapacity();
+            sum *= car.getCostPerKilometer();
             this.price = sum;
         }
         else sum = this.price;

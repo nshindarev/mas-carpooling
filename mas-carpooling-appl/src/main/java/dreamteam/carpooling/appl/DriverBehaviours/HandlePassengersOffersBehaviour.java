@@ -3,6 +3,7 @@ package dreamteam.carpooling.appl.DriverBehaviours;
 import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.Util.*;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -28,6 +29,14 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
 
     @Override
     public void action() {
+
+        /**
+         * проверяем поле decided_to_drive у водителя:
+         * --- if (true) -> отправляем сообщения :
+         *                  если пассажир есть в best_offers списке ---> approve
+         *                  если пассажира нет в best_offers        ---> no free place
+         *     if (false) -> отправляем всем в списке               ---> more cash
+         */
         //CitizenAgent.logger.info("{} is handling a proposal from passenger", myAgent.getAID().getLocalName());
 
         // TODO: dummy stub, реализовать логику расчёта и принятия/отказа
@@ -107,152 +116,21 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
     }
 
 
-    //TODO: переделать
-    /**
-     * анализ предложения от пассажира
-     * @param cashValue
-     * @return
-     */
-    public boolean canTakePassenger (double cashValue, String start, String finish){
+    public class PassengerState {
+        public AID passenger;
+        public double proposedPrice;
+        public boolean answered;
+        public boolean accepted;
+        public boolean toBeDeleted;
+        public String conversationID;
 
-        if (this.myCitizenAgent.getCarCapacity() > this.myCitizenAgent.companions.size()){
-            if (countAcceptablePrice(start, finish) <= cashValue){
-                /* TODO: убрать отсюда переопределение маршрута.
-                *  TODO: переопределять его там где пассажир ответил согласием
-                */
-                // переопределим новый маршрут
-                List<MyWeightedEdge> newRoadFirstPart = DijkstraShortestPath.findPathBetween(this.myCitizenAgent.getCity(), this.myCitizenAgent.getStart(), start);
-                List<MyWeightedEdge> newRoadMiddlPart = DijkstraShortestPath.findPathBetween(this.myCitizenAgent.getCity(), this.myCitizenAgent.getStart(), this.myCitizenAgent.getFinish());
-                List<MyWeightedEdge> newRoadFinalPart = DijkstraShortestPath.findPathBetween(this.myCitizenAgent.getCity(), finish, this.myCitizenAgent.getFinish());
-
-                newRoadFirstPart.addAll(newRoadMiddlPart);
-                newRoadFirstPart.addAll(newRoadFinalPart);
-
-                this.myCitizenAgent.setNewRoad(newRoadFirstPart);
-
-                return true;
-            }
-            else return false;
-
+        public PassengerState(AID driver, double curPrice, String conversationID) {
+            this.passenger = driver;
+            this.proposedPrice = curPrice;
+            this.answered = false;
+            this.accepted = false;
+            this.conversationID = conversationID;
+            this.toBeDeleted = false;
         }
-        else return false;
-
-    }
-
-    /**
-     * считаем цену для пассажира с учётом изменения маршрута за его счет
-     * @param start
-     * @param finish
-     */
-    public double countAcceptablePrice (String start, String finish){
-
-        boolean found_start_in_route = false;
-        boolean found_finish_in_route = false;
-        double price = 0;
-        double additionalPrice = 0;
-        double greed_value = 0;
-        LinkedList<MyWeightedEdge> newRoute = new LinkedList<>();
-
-       for (MyWeightedEdge road_in_route:
-             myCitizenAgent.getCurrentRoute().getEdgeList()) {
-
-            if(road_in_route.getSource().equals(start) ||
-                    road_in_route.getTarget().equals(start)){
-                found_start_in_route = true;
-            }
-
-            if(road_in_route.getSource().equals(finish) ||
-                    road_in_route.getTarget().equals(finish)){
-                found_finish_in_route = true;
-            }
-
-        }
-        if (found_start_in_route && found_finish_in_route){
-
-            for (MyWeightedEdge edge_in_route:
-                 myCitizenAgent.getCurrentRoute().getEdgeList()) {
-              price += edge_in_route.get_weight();
-            }
-            greed_value = price * myCitizenAgent.getGreed();
-            price /= myCitizenAgent.companions.size();
-            price += greed_value;
-        }
-        // TODO: переопределить currentRoute
-        else if (!found_finish_in_route && !found_start_in_route){
-
-            for (MyWeightedEdge till_start_point:
-                    DijkstraShortestPath.findPathBetween(this.myCitizenAgent.getCity(), this.myCitizenAgent.getStart(), start)) {
-                additionalPrice += till_start_point.get_weight();
-
-            }
-
-            for (MyWeightedEdge edge_in_route:
-                    myCitizenAgent.getCurrentRoute().getEdgeList()) {
-                price += edge_in_route.get_weight();
-            }
-
-            for (MyWeightedEdge till_finish_point:
-                    DijkstraShortestPath.findPathBetween(this.myCitizenAgent.getCity(), this.myCitizenAgent.getStart(), start)) {
-                additionalPrice += till_finish_point.get_weight();
-            }
-
-            greed_value = price * myCitizenAgent.getGreed();
-            price /= myCitizenAgent.companions.size();
-            price += additionalPrice;
-            price += greed_value;
-
-
-        }
-        else if (!found_start_in_route){
-
-
-            for (MyWeightedEdge till_start_point:
-                    DijkstraShortestPath.findPathBetween(this.myCitizenAgent.getCity(), this.myCitizenAgent.getStart(), start)) {
-                additionalPrice += till_start_point.get_weight();
-
-            }
-
-            for (MyWeightedEdge edge_in_route:
-                    myCitizenAgent.getCurrentRoute().getEdgeList()) {
-                price += edge_in_route.get_weight();
-            }
-
-
-            greed_value = price * myCitizenAgent.getGreed();
-            price /= myCitizenAgent.companions.size();
-            price += additionalPrice;
-            price += greed_value;
-        }
-        else if (!found_finish_in_route){
-
-           for (MyWeightedEdge edge_in_route:
-                    myCitizenAgent.getCurrentRoute().getEdgeList()) {
-                price += edge_in_route.get_weight();
-            }
-            for (MyWeightedEdge till_finish_point:
-                    DijkstraShortestPath.findPathBetween(this.myCitizenAgent.getCity(), this.myCitizenAgent.getStart(), start)) {
-                additionalPrice += till_finish_point.get_weight();
-
-            }
-
-
-            greed_value = price * myCitizenAgent.getGreed();
-            price /= myCitizenAgent.companions.size();
-            price += additionalPrice;
-            price += greed_value;
-        }
-
-
-
-        if (price != 0) return price;
-        else return Double.MAX_VALUE;
-
-
-
-    }
-
-
-    public void countNewPrices(){
-
     }
 }
