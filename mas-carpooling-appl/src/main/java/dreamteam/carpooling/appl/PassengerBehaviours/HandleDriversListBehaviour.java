@@ -42,6 +42,10 @@ public class HandleDriversListBehaviour extends TickerBehaviour {
             // Забиваем на него
         */
 
+        /**
+         *    О
+         *
+         */
         boolean allAnswered = true;
         for (DriverState driverState : driversStates) {
             if (!driverState.answered) {

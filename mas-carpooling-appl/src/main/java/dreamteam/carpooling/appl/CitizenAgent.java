@@ -8,7 +8,7 @@ import dreamteam.carpooling.appl.Util.City;
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 import dreamteam.carpooling.appl.Util.MyCityGraph;
-import dreamteam.carpooling.appl.Util.Parser;
+import dreamteam.carpooling.appl.Util.Offer;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -57,10 +57,11 @@ public class CitizenAgent extends Agent {
 
 
     /**
-     *   greed --- коэфициент жадности для водителя
+     *   greed              --- коэфициент жадности для водителя
+     *   decided_to_drive   --- водитель принял решение ехать на своей машине
      */
-    private double greed;
-
+    private double  greed;
+    private boolean decided_to_drive = false;
 
     /**
      *  companions      --- ID попутчиков
@@ -152,12 +153,8 @@ public class CitizenAgent extends Agent {
         addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
         addBehaviour(new HandleDriversListBehaviour(this, 1000));
 
-        logger.info("");
+
     }
-
-
-
-
 
 
     /**
@@ -216,16 +213,4 @@ public class CitizenAgent extends Agent {
 
 }
 
-class Offer {
 
-    public String start, finish;
-    public double price;
-    public AID id;
-
-    public Offer(String start, String finish, double price, AID id){
-        this.id = id;
-        this.start = start;
-        this.finish = finish;
-        this.price = price;
-    }
-}

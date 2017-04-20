@@ -2,6 +2,7 @@ package dreamteam.carpooling.appl.DriverBehaviours;
 
 import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
+import dreamteam.carpooling.appl.Util.*;
 import jade.core.Agent;
 import jade.core.behaviours.TickerBehaviour;
 import org.jgrapht.alg.DijkstraShortestPath;
@@ -46,6 +47,8 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
         } else {
             // TODO: смотрим контент, рассчитываем, подходит ли нам такая сделка
             ACLMessage reply = msg.createReply();
+
+
             double random = new Random().nextDouble();
             double divide = 0.5;
             reply.setPerformative(random < divide ?
@@ -59,6 +62,52 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
         }
     }
 
+
+    /**
+     * метод перебирает все возможные комбинации на основе предложений от пассажиров
+     * @return список из лучших предложений
+     */
+    public List<Offer> analyzeOffersPool (){
+        List<Offer> offers_pool = this.myCitizenAgent.offersPool;
+        List<Offer> best_offer_combo = new LinkedList<>();
+
+        int n = offers_pool.size();
+        double offers_price = 0;
+        double max_price = 0;
+
+        // мы можем взять не больше человек, чем вместит в себя машина
+        int allMasks =  ((1 << n) < this.myCitizenAgent.getCarCapacity() ? (1 << n) : this.myCitizenAgent.getCarCapacity());
+
+        for (int i = 1; i < allMasks; i++)             // тут рассматривается одно подмножество
+        {
+            offers_price = 0;
+
+            for (int j = 0; j < n; j++){
+                if ((i & (1 << j)) > 0) {                // j-тый элемент подмножества используется, суммируем его вклад
+
+                    offers_price += offers_pool.get(j).price;
+
+                    if (offers_price > max_price){
+                        best_offer_combo = new LinkedList<>();
+                        max_price = offers_price;
+
+                        for(int k = 0; k < n; k++){
+                            if ((i & (1 << k)) > 0){
+                                best_offer_combo.add(offers_pool.get(k));
+                            }
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        return best_offer_combo;
+    }
+
+
+    //TODO: переделать
     /**
      * анализ предложения от пассажира
      * @param cashValue
