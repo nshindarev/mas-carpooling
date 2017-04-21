@@ -73,7 +73,7 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
 
         if (m.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
             returnCode = PassengerFSMBehaviour.POSITIVE_CONDITION;
-            // TODO: сохранять сообщение или отправителя
+            myParentFSM.acceptedProposal = m;
         } else { // performative == REJECT_PROPOSAL
             if (msg.getContent().equals(Conversation.NO_SEATS)) {
                 // TODO: проблема - при возвращении в это поведение сбросится счётчик ответов (но это неточно)

@@ -21,6 +21,7 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
     public String currentIterationID;
     public List<AID> suitableDrivers = new LinkedList<>();
     public String driverToRemove;
+    public ACLMessage acceptedProposal;
 
     private CitizenAgent myCitizenAgent = (CitizenAgent) getAgent();
 
@@ -39,9 +40,6 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
     public static final int NEGATIVE_CONDITION = 0;
     public static final int FORCE_REJECT = 0;
 
-    // TODO: шаблон и прочая муть
-    private final ReceiverBehaviour transactionConfirmationReceiverBehaviour = null;
-
     public PassengerFSMBehaviour(Agent a) {
         super(a);
 
@@ -54,7 +52,7 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
         registerState(new RaiseOfferPriceBehaviour(), RAISE_OFFER_PRICE_STATE);
         registerState(new RemoveDriverFromList(), REMOVE_DRIVER_STATE);
         registerState(new SendAgreeToAcceptedProposalBehaviour(), SEND_AGREE_TO_ACCEPTED_PROPOSAL_STATE);
-        registerState(transactionConfirmationReceiverBehaviour, TRANSACTION_CONFIRMATION_STATE);
+        registerState(new TransactionConfirmationReceiverBehaviour(a, Conversation.REPLY_TIME), TRANSACTION_CONFIRMATION_STATE);
         registerLastState(new SendCancelBehaviour(), SEND_CANCEL_STATE);
 
         // Регистрируем переходы
@@ -73,14 +71,6 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
         registerTransition(TRANSACTION_CONFIRMATION_STATE, WAIT_FOR_ANSWERS_TO_PROPOSE_STATE, NEGATIVE_CONDITION);
         registerTransition(TRANSACTION_CONFIRMATION_STATE, SEND_CANCEL_STATE, POSITIVE_CONDITION);
 
-        CitizenAgent.logger.info(stringifyTransitionTable());
-
-        // Готовность:
-        // SearchYP
-        // Send proposals
-        // Receive answers
-        // Remove driver
-        // Raise offer
     }
 
 }
