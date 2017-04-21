@@ -14,19 +14,20 @@ import java.util.List;
  */
 public class SendProposalsBehaviour extends OneShotBehaviour {
 
-    private CitizenAgent myCitizenAgent = (CitizenAgent) myAgent;
+    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+    private CitizenAgent myCitizenAgent = (CitizenAgent) getAgent();
 
     @Override
     public void action() {
-        // TODO: получаем текущую цену
-        double price = 10.1;
+        double price = myCitizenAgent.getPrice();
 
-        List<AID> suitableDrivers = myCitizenAgent.suitableDrivers;
+        List<AID> suitableDrivers = myParentFSM.suitableDrivers;
+        String id = myParentFSM.currentIterationID;
 
         suitableDrivers.forEach(aid -> {
             ACLMessage startConversationMessage = new ACLMessage(ACLMessage.PROPOSE);       // Создаём предложение ...
             startConversationMessage.addReceiver(aid);                                      // ... для текущего водителя. ...
-            startConversationMessage.setConversationId(Conversation.getNextID());           // ... Присваиваем ID беседе, ...
+            startConversationMessage.setConversationId(id);                                 // ... Присваиваем ID беседе, ...
 
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MILLISECOND, Conversation.REPLY_TIME);
@@ -36,7 +37,7 @@ public class SendProposalsBehaviour extends OneShotBehaviour {
             startConversationMessage.setContent(Conversation.convertProposalDataToContent(  // ... устанавливаем содержимое:
                     myCitizenAgent.getStart(),                                              // - старт,
                     myCitizenAgent.getFinish(),                                             // - финиш,
-                    price));                                                                // - начальную цену
+                    price));                                                                // - цену
 
             myCitizenAgent.send(startConversationMessage);                                  // Отправляем сообщение
 

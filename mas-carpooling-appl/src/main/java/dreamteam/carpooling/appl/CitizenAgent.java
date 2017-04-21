@@ -5,20 +5,14 @@ import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviou
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 
 import dreamteam.carpooling.appl.Util.*;
-import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
-import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
-import jade.domain.DFService;
-import jade.domain.FIPAException;
-
 import org.jgrapht.alg.FloydWarshallShortestPaths;
-import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.GraphWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +42,7 @@ public class CitizenAgent extends Agent {
     private GraphPath<String, MyWeightedEdge> myCurrentWay = null;
     private FloydWarshallShortestPaths<String, MyWeightedEdge> shortestPaths = City.getShortestPaths();
 
-   // TODO: что-то где-то из-за такого счетчика может сломаться
-    private double price = 1;
+    private double price;
 
 
     /**
@@ -68,7 +61,6 @@ public class CitizenAgent extends Agent {
     public List<AID> companions = new LinkedList<>();
     public List<Offer> offersPool = new LinkedList<>();
     public List<Offer> best_offer = new LinkedList<>();
-    public List<AID> suitableDrivers = new LinkedList<>();
 
     /**
      *   get/set
@@ -97,6 +89,8 @@ public class CitizenAgent extends Agent {
 
 
     public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+
     public String getStart()  {
         return start;
     }
@@ -139,7 +133,7 @@ public class CitizenAgent extends Agent {
         if (car != null) {
             addBehaviour(new RegisterInYPBehaviour());
             addBehaviour(new HandlePassengersOffersBehaviour());
-            addBehaviour(new CheckPassengerPoolBehaviour());
+            //addBehaviour(new CheckPassengerPoolBehaviour());
 
             this.wayWithMyCar = null;
             getWayByMyCar();

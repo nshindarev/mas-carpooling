@@ -20,7 +20,8 @@ import java.util.List;
  */
 public class SearchDriversOffersInYPBehaviour extends OneShotBehaviour {
 
-    private CitizenAgent myCitizenAgent = (CitizenAgent) myAgent;
+    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+    private CitizenAgent myCitizenAgent = (CitizenAgent) getAgent();
 
     public List<AID> addedDrivers = new LinkedList<>();
 
@@ -54,7 +55,7 @@ public class SearchDriversOffersInYPBehaviour extends OneShotBehaviour {
                                 if (!provider.equals(myAgent.getAID())
                                         && !addedDrivers.contains(provider)
                                         && districtsAreSuitable(districts.getValue().toString().split(","))) {
-                                    myCitizenAgent.suitableDrivers.add(provider);
+                                    myParentFSM.suitableDrivers.add(provider);
                                     addedDrivers.add(provider);
                                     CitizenAgent.logger.info("{} found new suitable driver: {}",
                                             myAgent.getAID().getLocalName(),

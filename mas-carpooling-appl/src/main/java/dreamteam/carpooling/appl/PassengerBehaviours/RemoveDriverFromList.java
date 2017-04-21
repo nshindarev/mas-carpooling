@@ -6,8 +6,13 @@ import jade.core.behaviours.OneShotBehaviour;
  * Убрать водителя из списка в случае жёсткого отказа
  */
 public class RemoveDriverFromList extends OneShotBehaviour {
+
+    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+
     @Override
     public void action() {
-        // TODO: убрать водителя из списка
+        myParentFSM.suitableDrivers.removeIf(
+                aid -> aid.getLocalName().equals(myParentFSM.driverToRemove)
+        );
     }
 }
