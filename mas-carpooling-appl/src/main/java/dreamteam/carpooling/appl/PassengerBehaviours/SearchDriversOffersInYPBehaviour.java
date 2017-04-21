@@ -3,8 +3,7 @@ package dreamteam.carpooling.appl.PassengerBehaviours;
 import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.District;
 import jade.core.AID;
-import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.Property;
@@ -19,18 +18,14 @@ import java.util.List;
  * Поиск предложений от водителей. Когда пассажир находит подходящего водителя,
  * он записывает его в персональный список.
  */
-public class SearchDriversOffersInYPBehaviour extends TickerBehaviour {
+public class SearchDriversOffersInYPBehaviour extends OneShotBehaviour {
 
     private CitizenAgent myCitizenAgent = (CitizenAgent) myAgent;
 
     public List<AID> addedDrivers = new LinkedList<>();
 
-    public SearchDriversOffersInYPBehaviour(Agent a, long period) {
-        super(a, period);
-    }
-
     @Override
-    protected void onTick() {
+    public void action() {
         // CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getLocalName());
 
         try {

@@ -4,7 +4,6 @@ import dreamteam.carpooling.appl.DriverBehaviours.CheckPassengerPoolBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 
-import dreamteam.carpooling.appl.PassengerBehaviours.HandleDriversListBehaviour;
 import dreamteam.carpooling.appl.Util.*;
 import dreamteam.carpooling.appl.PassengerBehaviours.SearchDriversOffersInYPBehaviour;
 
@@ -151,8 +150,9 @@ public class CitizenAgent extends Agent {
         this.greed = Math.random() * 0.15;
 
         // Поведения для роли пассажира
-        addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
-        addBehaviour(new HandleDriversListBehaviour(this, 1000));
+        // TODO: добавить FSM
+        // addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
+        // addBehaviour(new HandleDriversListBehaviour(this, 1000));
 
 
     }
