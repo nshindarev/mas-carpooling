@@ -23,7 +23,6 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.GraphWalk;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.jvm.hotspot.utilities.IntegerEnum;
 
 import java.util.LinkedList;
 import java.util.List;
