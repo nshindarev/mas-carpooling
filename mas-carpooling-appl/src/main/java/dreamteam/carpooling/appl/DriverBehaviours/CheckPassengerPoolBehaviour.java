@@ -7,7 +7,10 @@ import jade.core.behaviours.CyclicBehaviour;
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *   Поведение проверяет, нужно ли агенту выбрать роль водителя
@@ -55,6 +58,7 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
 
         if (!inequality){
             myCitizenAgent.decided_to_drive = true;                    // ... решили ехать на своей машине
+            // просчитываем новый маршрут
         }
         else{
 
@@ -62,10 +66,12 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
 
     }
 
+
+    //TODO: неправильно высчитывается cd !!!
     /**
      *   pp < (pd - cd) < p0,
 
-     pp - цена, которуб агент заплатит в качестве пассажира (постоянно повышается),
+     pp - цена, которую агент заплатит в качестве пассажира (постоянно повышается),
      pd - суммарный профит для водителя, который он получит, если возьмёт множество пассажиров,
      cd - суммарные траты водителя, которые он понесёт, если возьмёт множество пассажиров,
 
@@ -78,6 +84,7 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
 
         double pp, pd, cd, p0;
 
+
         pp = myCitizenAgent.getPrice();
 
         pd = 0;
@@ -86,13 +93,38 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
             pd += offer.price;
         }
 
+        p0 = myCitizenAgent.getCostByMyCar();
+
+
+
         GraphPath<String, MyWeightedEdge> cur_way = myCitizenAgent.getCurrentRoute();
         cd = cur_way.getWeight() * myCitizenAgent.car.getCostPerKilometer();
 
-        p0 = myCitizenAgent.getCostByMyCar();
+        /*Map<String, Map<String, Double>> distance_till_passenger = new HashMap<>();
+        for (String s:
+             myCitizenAgent.getWayByMyCar().getVertexList()) {
+
+            distance_till_passenger.put(s, new HashMap<>());
+            for (Offer approved:
+                 myCitizenAgent.best_offer) {
+
+                Map<String, Double> cur_ways = new HashMap<>();
+
+                // TODO: реализовать всю ту муть с HashMap-ами, которую навыдумывал
+                //    distance_till_passenger.put(s, );
+                //    distance_till_passenger.values().add("Start",  new Double(myCitizenAgent.getShortestPaths().shortestDistance(s, approved.start)));
+
+            }
+
+        }*/
 
         if ((pp < (pd - cd)) && ((pd - cd) < p0)) return true;
         else return false;
     }
 
+
+
+    public void setNewRoad(){
+
+    }
 }

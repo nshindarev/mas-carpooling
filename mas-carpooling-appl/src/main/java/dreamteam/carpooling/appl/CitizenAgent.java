@@ -107,7 +107,7 @@ public class CitizenAgent extends Agent {
     }
     public double getGreed()  { return greed; }
     public List<Offer> getBestOffer() { return best_offer; }
-
+    public FloydWarshallShortestPaths<String, MyWeightedEdge> getShortestPaths() { return this.getShortestPaths(); }
 
     @Override
     protected void setup() {
