@@ -96,6 +96,9 @@ public class CitizenAgent extends Agent {
     public void setNewRoad(List<MyWeightedEdge> input){
         this.myCurrentWay = new GraphWalk<String, MyWeightedEdge>(city, start, finish, input, this.countPrice(input));
     }
+    public void setNewRoad (GraphPath<String, MyWeightedEdge> input){
+        this.myCurrentWay = input;
+    }
 
 
     public double getPrice() { return price; }
