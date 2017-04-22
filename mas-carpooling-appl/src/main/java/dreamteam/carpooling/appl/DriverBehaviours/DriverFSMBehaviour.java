@@ -2,15 +2,17 @@ package dreamteam.carpooling.appl.DriverBehaviours;
 
 import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Conversation;
+import dreamteam.carpooling.appl.Util.Offer;
 import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
+import jade.lang.acl.ACLMessage;
 
 /**
  * Сценарий для роли водителя
  */
 public class DriverFSMBehaviour extends FSMBehaviour {
 
-    private CitizenAgent myCitizenAgent; // Наш агент
+    public CitizenAgent myCitizenAgent; // Наш агент
 
     private final String REGISTER_IN_YP_STATE             = "Register in YP";
     private final String WAIT_FOR_PROPOSALS_STATE         = "Wait for proposals";
@@ -27,6 +29,13 @@ public class DriverFSMBehaviour extends FSMBehaviour {
 
     public static final int POSITIVE_CONDITION = 1;
     public static final int NEGATIVE_CONDITION = 0;
+
+    /**
+     *   результаты работы состояний
+     */
+    public Offer offerToAdd;
+    public ACLMessage lastOffer;
+
 
     // TODO: перенести по максимуму логику водителя из класса CitizenAgent
 

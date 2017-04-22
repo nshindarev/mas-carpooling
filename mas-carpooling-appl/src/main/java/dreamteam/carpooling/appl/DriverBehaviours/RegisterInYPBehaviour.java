@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Регистрация в сервисе Yellow Pages в качестве водителя
+ *  Регистрация в сервисе Yellow Pages в качестве водителя
  */
 public class RegisterInYPBehaviour extends OneShotBehaviour {
 

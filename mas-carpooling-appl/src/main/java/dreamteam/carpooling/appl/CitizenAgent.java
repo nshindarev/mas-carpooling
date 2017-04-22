@@ -102,7 +102,24 @@ public class CitizenAgent extends Agent {
         return finish;
     }
     public double getGreed()  { return greed; }
+
+    /**
+     * get/update методы для работы с пулом предложений
+     */
+    public List<Offer> getOffersPool(){ return offersPool; }
     public List<Offer> getBestOffer() { return best_offer; }
+    public void updateOfferInPool(Offer offer){
+        for (Offer in_pool
+                : this.offersPool) {
+
+            if (in_pool.id.getName().equals(offer.id.getName())) {
+                this.offersPool.remove(in_pool);
+                this.offersPool.add(offer);
+            }
+        }
+    }
+
+
     public FloydWarshallShortestPaths<String, MyWeightedEdge> getShortestPaths() { return this.getShortestPaths(); }
 
     @Override

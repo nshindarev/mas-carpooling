@@ -70,7 +70,6 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
         else{
 
         }
-
     }
 
 
@@ -101,139 +100,6 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
         }
 
         p0 = myCitizenAgent.getCostByMyCar();
-
-
-
-        // VER 1.0
-        // GraphPath<String, MyWeightedEdge> cur_way = myCitizenAgent.getCurrentRoute();
-        // cd = cur_way.getWeight() * myCitizenAgent.car.getCostPerKilometer();
-
-        // VER 1.2
-
-        /**
-         * distance_till_passenger
-         *
-         * Pair<True, ....(path)... >  => забираем пассажира в конечной точке этого пути
-         * Pair<False, ...(path)... >  => привезли пассажира в конечной точке этого пути
-         *
-         */
-         // Map<String, List<Pair<Boolean,GraphPath<String,MyWeightedEdge>>>> distance_till_passenger = new HashMap<>();     //... внешняя хеш-таблица
-
-
-        /**
-         * добавим все стартовые точки из пула лучших предложений
-         * True ---> за ним надо заехать
-         * False --> его надо отвезти
-         */
-       /* List<Pair<Offer,String>> to_visit = new LinkedList<>();                                       //... для проверки того, что не попадаем в посещенные
-        for (Offer offer:
-                myCitizenAgent.best_offer){
-            to_visit.add(new Pair<>(offer, offer.start));
-        }
-
-
-        for (String my_point:
-                myCitizenAgent.getWayByMyCar().getVertexList()) {                                                 //... заполним для каждой точки пути водителя
-                                                                                                                  //... ее shortest paths до попутчиков
-            List<Pair<Boolean, GraphPath<String, MyWeightedEdge>>> cur_distances = new LinkedList<>();
-            for (Offer passenger:
-                 myCitizenAgent.best_offer) {
-
-                cur_distances.add(
-                        new Pair<Boolean, GraphPath<String,MyWeightedEdge>>(Boolean.TRUE, myCitizenAgent.getShortestPaths().getShortestPath(my_point, passenger.start)));
-            }
-
-            distance_till_passenger.put(my_point, cur_distances);
-        }
-
-          */                                                                                                         //... теперь нужно найти ближайшего попутчика в маршруте
-        /**
-         * забрали пассажира ---> добавляем во все списки new Pair<false, ...(path to fin)...>
-         * привезли пассажира ---> удаляем из всех списков эту точку с финишем
-         */
-
-      /*  Pair<Boolean, GraphPath<String, MyWeightedEdge>> way_to_closest_passenger = null;
-        Double min_route = Double.MAX_VALUE;
-        Boolean st_fin;
-
-        for (String start_in_new_hook:                                                                             //... выбираем в цикле вершину с минимальным расстоянием
-                distance_till_passenger.keySet()){                                                                 //... дополним информацией: забрали/ привезли
-            for (Pair<Boolean, GraphPath<String, MyWeightedEdge>> shortest_path:
-                  distance_till_passenger.get(start_in_new_hook)) {
-
-                // поиск минимального отклонения от текущего маршрута
-                if (shortest_path.second.getWeight() <= min_route){
-
-                    min_route = shortest_path.second.getWeight();
-                    way_to_closest_passenger =  shortest_path ;
-
-                }
-            }
-
-
-            if (way_to_closest_passenger != null){
-
-                // помечаем, что посетили вершину в планах посещений:
-                for (Pair<Offer, String> to_vis:
-                        to_visit){
-                    if (to_vis.second.equals(way_to_closest_passenger.second.getEndVertex()))
-                    {
-                        if(to_vis.first.start.equals(to_vis.second)){                                          // в планах посещений хранится как старт
-                            to_visit.remove(to_vis);
-                            to_visit.add(new Pair<>(to_vis.first, to_vis.first.finish));
-                        }
-
-                        else if (to_vis.first.finish.equals(to_vis.second)){                                   // в планах посещений хранится как финиш
-
-                            to_visit.remove(to_vis);
-                        }
-                    }
-                }
-
-
-                List<Pair<Boolean,GraphPath<String,MyWeightedEdge>>> from_newpoint_to_another = new LinkedList<>();        // добавляем новую вершину в пути в хеш-таблицу
-
-
-                for (Pair<Offer, String> to_vis:
-                        to_visit) {
-                    from_newpoint_to_another.add(new Pair<>(to_vis.first.start.equals(to_vis.second) ? Boolean.TRUE:Boolean.FALSE
-                            , myCitizenAgent.getShortestPaths().getShortestPath(way_to_closest_passenger.second.getEndVertex(), to_vis.second)));
-                }
-
-                distance_till_passenger.put(way_to_closest_passenger.second.getEndVertex(), from_newpoint_to_another);
-
-*/
-                /**
-                 * Update Hash Table
-                 */
-
-                // если нам нужно заехать за пассажиром
-                // обновляем каждый список в хеш-таблице start -> finish
-              /*  if (way_to_closest_passenger.first) {
-
-                    for (List<Pair<Boolean, GraphPath<String,MyWeightedEdge>>> cur_sh_paths:
-                         distance_till_passenger.values()) {
-
-                        for (Pair<Boolean, GraphPath<String, MyWeightedEdge>> cur_sh_path:
-                             cur_sh_paths) {
-                            if
-                        }
-                    }
-                }
-
-
-                //если нужно отвезти пассажира
-                //удаляем
-                else {
-
-
-
-                }
-
-            }
-
-
-        }*/
 
 
         /**
@@ -328,12 +194,6 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
 
         if ((pp < (pd - cd)) && ((pd - cd) < p0)) return true;
         else return false;
-    }
-
-
-
-    public void setNewRoad(){
-
     }
 }
 
