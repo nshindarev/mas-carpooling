@@ -5,9 +5,7 @@ import dreamteam.carpooling.appl.Util.Conversation;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
-import jade.core.behaviours.ReceiverBehaviour;
 import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +21,7 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
     public String driverToRemove;
     public ACLMessage acceptedProposal;
 
-    private CitizenAgent myCitizenAgent = (CitizenAgent) getAgent();
+    private CitizenAgent myCitizenAgent;
 
     private final String SEARCH_DRIVERS_STATE                  = "Search drivers";
     private final String SEND_PROPOSALS_STATE                  = "Send proposals";
@@ -36,13 +34,14 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
     private final String TRANSACTION_CONFIRMATION_STATE        = "Wait for transaction confirmation";
     private final String SEND_CANCEL_STATE                     = "Send CANCEL to other drivers";
 
-    public static final int POSITIVE_CONDITION = 1;
-    public static final int NEGATIVE_CONDITION = 0;
-    public static final int FORCE_REJECT = 0;
+    public static final int POSITIVE_CONDITION =  1;
+    public static final int NEGATIVE_CONDITION =  0;
+    public static final int FORCE_REJECT       = -1;
 
     public PassengerFSMBehaviour(Agent a) {
         super(a);
 
+        myCitizenAgent = (CitizenAgent) myAgent;
         myCitizenAgent.setPrice(Conversation.START_PRICE);
 
         // Регистрируем состояния
@@ -53,7 +52,7 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
         registerState(new RemoveDriverFromList(), REMOVE_DRIVER_STATE);
         registerState(new SendAgreeToAcceptedProposalBehaviour(), SEND_AGREE_TO_ACCEPTED_PROPOSAL_STATE);
         registerState(new TransactionConfirmationReceiverBehaviour(a, Conversation.REPLY_TIME), TRANSACTION_CONFIRMATION_STATE);
-        registerLastState(new SendCancelBehaviour(), SEND_CANCEL_STATE);
+        registerLastState(new FinalizeTransactionBehaviour(), SEND_CANCEL_STATE);
 
         // Регистрируем переходы
         registerDefaultTransition(SEARCH_DRIVERS_STATE, SEND_PROPOSALS_STATE);

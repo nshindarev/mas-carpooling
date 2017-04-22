@@ -14,7 +14,8 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
     private long timeOut, wakeupTime;
     private boolean finished;
 
-    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+    private PassengerFSMBehaviour myParentFSM;
+
     private ACLMessage msg;
     private int returnCode;
     private int messagesReceived = 0;
@@ -31,8 +32,7 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
     }
 
     public void onStart() {
-        wakeupTime = (timeOut<0 ? Long.MAX_VALUE
-                :System.currentTimeMillis() + timeOut);
+        myParentFSM = (PassengerFSMBehaviour) getParent();
     }
 
     @Override
@@ -43,16 +43,24 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
     @Override
     public void action()
     {
+        wakeupTime = (timeOut<0 ? Long.MAX_VALUE
+                :System.currentTimeMillis() + timeOut);
+        returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
+
         msg = myAgent.receive(template);
 
-        if( msg != null &&
-                // Проверяем по ID
-                msg.getConversationId().equals(myParentFSM.currentIterationID)) {
-            messagesReceived++;
-            // Смотрим, все ли ответили
-            finished = messagesReceived == myParentFSM.suitableDrivers.size();
-            handle( msg );
-            return;
+        if(msg != null) {
+            if(msg.getConversationId().equals(myParentFSM.currentIterationID)) {
+                messagesReceived++;
+                CitizenAgent.logger.info("{} has {} received messages of {}",
+                        myAgent.getLocalName(),
+                        messagesReceived,
+                        myParentFSM.suitableDrivers.size());
+                // Смотрим, все ли ответили
+                finished = messagesReceived == myParentFSM.suitableDrivers.size();
+                handle( msg );
+                return;
+            }
         }
         long dt = wakeupTime - System.currentTimeMillis();
         if ( dt > 0 )
@@ -72,11 +80,13 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
         }
 
         if (m.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
+            CitizenAgent.logger.info("{} has an accepted proposal from {}",
+                    myAgent.getLocalName(),
+                    m.getSender().getLocalName());
             returnCode = PassengerFSMBehaviour.POSITIVE_CONDITION;
             myParentFSM.acceptedProposal = m;
         } else { // performative == REJECT_PROPOSAL
             if (msg.getContent().equals(Conversation.NO_SEATS)) {
-                // TODO: проблема - при возвращении в это поведение сбросится счётчик ответов (но это неточно)
                 messagesReceived--;
                 returnCode = PassengerFSMBehaviour.FORCE_REJECT;
                 myParentFSM.driverToRemove = msg.getSender().getLocalName();

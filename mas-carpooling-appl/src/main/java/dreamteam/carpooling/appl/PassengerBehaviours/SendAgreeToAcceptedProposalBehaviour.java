@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.PassengerBehaviours;
 
+import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Conversation;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -11,10 +12,9 @@ import java.util.Calendar;
  */
 public class SendAgreeToAcceptedProposalBehaviour extends OneShotBehaviour {
 
-    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
-
     @Override
     public void action() {
+        PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
 
         ACLMessage reply = myParentFSM.acceptedProposal.createReply();
         reply.setPerformative(ACLMessage.AGREE);
@@ -26,5 +26,9 @@ public class SendAgreeToAcceptedProposalBehaviour extends OneShotBehaviour {
         reply.setContent(Conversation.CONTENT_STUB);
 
         myParentFSM.getAgent().send(reply);
+
+        CitizenAgent.logger.info("{} sent AGREE to driver {}",
+                myAgent.getLocalName(),
+                myParentFSM.acceptedProposal.getSender().getLocalName());
     }
 }

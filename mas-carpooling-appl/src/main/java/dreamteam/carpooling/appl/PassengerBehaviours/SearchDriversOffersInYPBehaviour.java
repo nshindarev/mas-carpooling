@@ -18,16 +18,19 @@ import java.util.List;
  * Поиск предложений от водителей. Когда пассажир находит подходящего водителя,
  * он записывает его в персональный список.
  */
+// TODO: не находит, если пассажир появился раньше водителя
 public class SearchDriversOffersInYPBehaviour extends OneShotBehaviour {
 
-    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
-    private CitizenAgent myCitizenAgent = (CitizenAgent) getAgent();
+    private CitizenAgent myCitizenAgent;
 
     public List<AID> addedDrivers = new LinkedList<>();
 
     @Override
     public void action() {
-        // CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getLocalName());
+         CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getLocalName());
+
+        PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+        myCitizenAgent = (CitizenAgent) myAgent;
 
         try {
             // Build the description used as template for the search

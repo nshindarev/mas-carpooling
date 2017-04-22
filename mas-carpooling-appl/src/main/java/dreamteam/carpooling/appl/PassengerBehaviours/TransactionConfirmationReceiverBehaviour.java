@@ -13,7 +13,8 @@ public class TransactionConfirmationReceiverBehaviour extends SimpleBehaviour {
     private long timeOut, wakeupTime;
     private boolean finished;
 
-    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+    private PassengerFSMBehaviour myParentFSM;
+
     private ACLMessage msg;
     private int returnCode;
 
@@ -30,6 +31,7 @@ public class TransactionConfirmationReceiverBehaviour extends SimpleBehaviour {
     }
 
     public void onStart() {
+        myParentFSM = (PassengerFSMBehaviour) getParent();
         wakeupTime = (timeOut<0 ? Long.MAX_VALUE
                 :System.currentTimeMillis() + timeOut);
     }

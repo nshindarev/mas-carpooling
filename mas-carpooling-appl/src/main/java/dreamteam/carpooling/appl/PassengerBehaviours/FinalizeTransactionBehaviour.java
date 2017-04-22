@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.PassengerBehaviours;
 
+import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Conversation;
 import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
@@ -8,14 +9,18 @@ import jade.lang.acl.ACLMessage;
 import java.util.List;
 
 /**
- * Когда пассажир получил подтверждение от водителя, он посылает всем остальным отмену
+ * Окончательные действия пассажира после подтверждения от водителя.
+ * В частности, он посылает всем остальным отмену
  */
-public class SendCancelBehaviour extends OneShotBehaviour {
+public class FinalizeTransactionBehaviour extends OneShotBehaviour {
 
-    private final PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+    private PassengerFSMBehaviour myParentFSM;
 
     @Override
     public void action() {
+
+        myParentFSM = (PassengerFSMBehaviour) getParent();
+
         List<AID> suitableDrivers = myParentFSM.suitableDrivers;
         String id = myParentFSM.currentIterationID;
 
@@ -36,6 +41,10 @@ public class SendCancelBehaviour extends OneShotBehaviour {
         });
 
         // TODO: выводить лог?
+        CitizenAgent.logger.info("{} goes with driver {} for price {}",
+                myAgent.getLocalName(),
+                myParentFSM.acceptedProposal.getSender().getLocalName(),
+                ((CitizenAgent) myAgent).getPrice());
 
     }
 }

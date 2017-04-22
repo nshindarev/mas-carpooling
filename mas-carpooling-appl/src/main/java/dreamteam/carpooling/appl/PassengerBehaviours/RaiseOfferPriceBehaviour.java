@@ -9,10 +9,12 @@ import jade.core.behaviours.OneShotBehaviour;
  */
 public class RaiseOfferPriceBehaviour extends OneShotBehaviour {
 
-    private CitizenAgent myCitizenAgent = (CitizenAgent) getAgent();
-
     @Override
     public void action() {
+        CitizenAgent myCitizenAgent = (CitizenAgent) myAgent;
         myCitizenAgent.setPrice(myCitizenAgent.getPrice() + Conversation.PRICE_STEP);
+        CitizenAgent.logger.info("{} raises price to {}",
+                myAgent.getLocalName(),
+                myCitizenAgent.getPrice());
     }
 }

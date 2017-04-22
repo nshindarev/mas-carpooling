@@ -14,13 +14,16 @@ import java.util.List;
  */
 public class SendProposalsBehaviour extends OneShotBehaviour {
 
-    private PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
-    private CitizenAgent myCitizenAgent = (CitizenAgent) getAgent();
+    private CitizenAgent myCitizenAgent;
 
     @Override
     public void action() {
-        double price = myCitizenAgent.getPrice();
+        PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
+        myCitizenAgent = (CitizenAgent) myAgent;
 
+        myParentFSM.currentIterationID = Conversation.getNextID();
+
+        double price = myCitizenAgent.getPrice();
         List<AID> suitableDrivers = myParentFSM.suitableDrivers;
         String id = myParentFSM.currentIterationID;
 
