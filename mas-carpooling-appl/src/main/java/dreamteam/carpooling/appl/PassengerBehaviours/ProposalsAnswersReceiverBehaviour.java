@@ -20,9 +20,7 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
     private int returnCode;
     private int messagesReceived;
 
-    MessageTemplate template = new MessageTemplate((MessageTemplate.MatchExpression) aclMessage ->
-            (aclMessage.getPerformative() == (ACLMessage.ACCEPT_PROPOSAL) ||
-                    aclMessage.getPerformative() == (ACLMessage.REJECT_PROPOSAL)));
+    MessageTemplate template;
 
     public ACLMessage getMessage() { return msg; }
 
@@ -34,6 +32,10 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
     public void onStart() {
         myParentFSM = (PassengerFSMBehaviour) getParent();
         messagesReceived = 0;
+        template = new MessageTemplate((MessageTemplate.MatchExpression) aclMessage ->
+                (aclMessage.getPerformative() == (ACLMessage.ACCEPT_PROPOSAL) ||
+                 aclMessage.getPerformative() == (ACLMessage.REJECT_PROPOSAL)) &&
+                 aclMessage.getConversationId().equals(myParentFSM.currentIterationID));
         wakeupTime = (timeOut<0 ? Long.MAX_VALUE
                 :System.currentTimeMillis() + timeOut);
     }
@@ -53,17 +55,15 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
         msg = myAgent.receive(template);
 
         if(msg != null) {
-            if(msg.getConversationId().equals(myParentFSM.currentIterationID)) {
-                messagesReceived++;
-                CitizenAgent.logger.info("{} has {} received messages of {}",
-                        myAgent.getLocalName(),
-                        messagesReceived,
-                        myParentFSM.suitableDrivers.size());
-                // Смотрим, все ли ответили
-                finished = messagesReceived == myParentFSM.suitableDrivers.size();
-                handle( msg );
-                return;
-            }
+            messagesReceived++;
+            CitizenAgent.logger.info("{} has {} received messages of {}",
+                    myAgent.getLocalName(),
+                    messagesReceived,
+                    myParentFSM.suitableDrivers.size());
+            // Смотрим, все ли ответили
+            finished = messagesReceived == myParentFSM.suitableDrivers.size();
+            handle( msg );
+            return;
         }
         long dt = wakeupTime - System.currentTimeMillis();
         if ( dt > 0 )
