@@ -149,8 +149,6 @@ public class CitizenAgent extends Agent {
 
         // Поведения для роли пассажира
         addBehaviour(new PassengerFSMBehaviour(this));
-        // addBehaviour(new SearchDriversOffersInYPBehaviour(this, 3000));
-        // addBehaviour(new HandleDriversListBehaviour(this, 1000));
 
 
     }

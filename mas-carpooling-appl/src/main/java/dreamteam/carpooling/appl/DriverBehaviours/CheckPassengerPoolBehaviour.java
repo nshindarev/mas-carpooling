@@ -21,6 +21,7 @@ import java.util.function.BooleanSupplier;
 /**
  *   Поведение проверяет, нужно ли агенту выбрать роль водителя
  *   или продолжать вбрасывать предложения другим водителям
+ *   @deprecated это поведение будет в составе DriverFSM
  */
 public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
 

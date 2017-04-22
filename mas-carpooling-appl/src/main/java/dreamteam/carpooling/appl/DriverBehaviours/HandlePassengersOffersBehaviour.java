@@ -19,6 +19,7 @@ import java.util.Random;
 
 /**
  * Обработка предложений от пассажиров
+ * @deprecated это поведение будет в составе DriverFSM
  */
 public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
 
