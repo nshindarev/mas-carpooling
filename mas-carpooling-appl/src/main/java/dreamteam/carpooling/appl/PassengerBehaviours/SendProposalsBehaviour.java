@@ -27,6 +27,8 @@ public class SendProposalsBehaviour extends OneShotBehaviour {
         List<AID> suitableDrivers = myParentFSM.suitableDrivers;
         String id = myParentFSM.currentIterationID;
 
+//        CitizenAgent.logger.info("{} sends PROPOSALS to suitable drivers", myAgent.getLocalName());
+
         suitableDrivers.forEach(aid -> {
             ACLMessage startConversationMessage = new ACLMessage(ACLMessage.PROPOSE);       // Создаём предложение ...
             startConversationMessage.addReceiver(aid);                                      // ... для текущего водителя. ...

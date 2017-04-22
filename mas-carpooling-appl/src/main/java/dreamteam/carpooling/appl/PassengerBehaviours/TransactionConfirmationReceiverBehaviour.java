@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.PassengerBehaviours;
 
+import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Conversation;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
@@ -18,10 +19,7 @@ public class TransactionConfirmationReceiverBehaviour extends SimpleBehaviour {
     private ACLMessage msg;
     private int returnCode;
 
-    // Ждём подтверждения от конкретного водителя
-    MessageTemplate template = new MessageTemplate((MessageTemplate.MatchExpression) aclMessage ->
-            (aclMessage.getPerformative() == (ACLMessage.AGREE) &&
-             aclMessage.getSender().getLocalName().equals(myParentFSM.acceptedProposal.getSender().getLocalName())));
+    MessageTemplate template;
 
     public ACLMessage getMessage() { return msg; }
 
@@ -34,6 +32,11 @@ public class TransactionConfirmationReceiverBehaviour extends SimpleBehaviour {
         myParentFSM = (PassengerFSMBehaviour) getParent();
         wakeupTime = (timeOut<0 ? Long.MAX_VALUE
                 :System.currentTimeMillis() + timeOut);
+
+        // Ждём подтверждения от конкретного водителя
+        template = new MessageTemplate((MessageTemplate.MatchExpression) aclMessage ->
+                (aclMessage.getPerformative() == (ACLMessage.AGREE) &&
+                 aclMessage.getSender().getLocalName().equals(myParentFSM.acceptedProposal.getSender().getLocalName())));
     }
 
     @Override
@@ -62,6 +65,11 @@ public class TransactionConfirmationReceiverBehaviour extends SimpleBehaviour {
 
     public void handle(ACLMessage m) {
 
+        if (m == null) {
+            /*CitizenAgent.logger.info("{} did not receive AGREE from {}",
+                    myAgent.getLocalName(),
+                    myParentFSM.acceptedProposal.getSender().getLocalName());*/
+        }
         returnCode = (m == null) ?
                 PassengerFSMBehaviour.NEGATIVE_CONDITION : // Время вышло, подтверждение не пришло
                 PassengerFSMBehaviour.POSITIVE_CONDITION;  // Подтверждение пришло

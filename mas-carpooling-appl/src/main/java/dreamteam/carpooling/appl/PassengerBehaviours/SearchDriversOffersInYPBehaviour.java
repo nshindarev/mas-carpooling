@@ -26,7 +26,7 @@ public class SearchDriversOffersInYPBehaviour extends OneShotBehaviour {
 
     @Override
     public void action() {
-         CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getLocalName());
+//         CitizenAgent.logger.info("{} is searching offers from drivers", myAgent.getAID().getLocalName());
 
         PassengerFSMBehaviour myParentFSM = (PassengerFSMBehaviour) getParent();
         myCitizenAgent = (CitizenAgent) myAgent;
@@ -59,9 +59,9 @@ public class SearchDriversOffersInYPBehaviour extends OneShotBehaviour {
                                         && districtsAreSuitable(districts.getValue().toString().split(","))) {
                                     myParentFSM.suitableDrivers.add(provider);
                                     addedDrivers.add(provider);
-                                    CitizenAgent.logger.info("{} found new suitable driver: {}",
+                                    /*CitizenAgent.logger.info("{} found new suitable driver: {}",
                                             myAgent.getAID().getLocalName(),
-                                            provider.getLocalName());
+                                            provider.getLocalName());*/
                                 }
                             }
                         }

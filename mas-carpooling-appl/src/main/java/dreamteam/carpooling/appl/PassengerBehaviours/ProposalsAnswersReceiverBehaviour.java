@@ -48,9 +48,7 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
     @Override
     public void action()
     {
-        if (returnCode == PassengerFSMBehaviour.FORCE_REJECT) {
-            returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
-        }
+        returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
 
         msg = myAgent.receive(template);
 
@@ -68,7 +66,7 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
         long dt = wakeupTime - System.currentTimeMillis();
         if ( dt > 0 )
             block(dt);
-        else {
+        else if (!finished) {
             finished = true;
             handle( msg );
         }
@@ -79,25 +77,27 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
         if (m == null) {
             // Время вышло, не все ответы пришли
             returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
-            CitizenAgent.logger.info("Time is up, no ACCEPT received");
+//            CitizenAgent.logger.info("Time is up, no ACCEPT received");
             return;
         }
 
         if (m.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
-            CitizenAgent.logger.info("{} has an ACCEPTed proposal from {}",
+            /*CitizenAgent.logger.info("{} has an ACCEPTed proposal from {}",
                     myAgent.getLocalName(),
-                    m.getSender().getLocalName());
+                    m.getSender().getLocalName());*/
+            finished = true;
             returnCode = PassengerFSMBehaviour.POSITIVE_CONDITION;
             myParentFSM.acceptedProposal = m;
         } else { // performative == REJECT_PROPOSAL
             if (msg.getContent().equals(Conversation.NO_SEATS)) {
                 messagesReceived--;
                 returnCode = PassengerFSMBehaviour.FORCE_REJECT;
+                finished = false;
                 myParentFSM.driverToRemove = msg.getSender().getLocalName();
             } else if (messagesReceived == myParentFSM.suitableDrivers.size()) {
                 // Все ответы пришли, ACCEPT нет
                 returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
-                CitizenAgent.logger.info("All answers received, no ACCEPTed");
+//                CitizenAgent.logger.info("All answers received, no ACCEPTed");
             }
         }
 

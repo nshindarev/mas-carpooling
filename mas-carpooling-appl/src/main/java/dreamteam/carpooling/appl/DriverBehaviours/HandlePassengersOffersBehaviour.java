@@ -43,7 +43,9 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
 
         // Шаблон для фильтрации сообщений
         MessageTemplate template = new MessageTemplate(aclMessage ->
-                aclMessage.getPerformative() == (ACLMessage.PROPOSE) // TODO: обработка AGREE, CANCEL
+                aclMessage.getPerformative() == (ACLMessage.PROPOSE) ||
+                aclMessage.getPerformative() == (ACLMessage.AGREE)
+                // TODO: обработка CANCEL?
         );
 
         if (myCitizenAgent == null) {
@@ -53,21 +55,28 @@ public class HandlePassengersOffersBehaviour extends CyclicBehaviour {
 
         if (msg == null) {
             block();
+        } else if (msg.getPerformative() == ACLMessage.AGREE) {
+            ACLMessage reply = msg.createReply();
+            reply.setPerformative(ACLMessage.AGREE);
+            reply.setContent(Conversation.CONTENT_STUB);
+            if (new Random().nextDouble() < 0.3) myCitizenAgent.send(reply);
         } else {
             // TODO: смотрим контент, рассчитываем, подходит ли нам такая сделка
             ACLMessage reply = msg.createReply();
 
-
             double random = new Random().nextDouble();
-            double divide = 0.5;
+            double divide = 0.3;
             reply.setPerformative(random < divide ?
                     ACLMessage.ACCEPT_PROPOSAL :
                     ACLMessage.REJECT_PROPOSAL);
+            reply.setContent(new Random().nextDouble() > 0.7 && reply.getPerformative() == ACLMessage.REJECT_PROPOSAL ?
+                    Conversation.NO_SEATS :
+                    Conversation.CONTENT_STUB);
             myAgent.send(reply);
-            CitizenAgent.logger.info("{} sent {} to passenger {} with content {}",
+            /*CitizenAgent.logger.info("{} sent {} to passenger {} with content {}",
                     myAgent.getLocalName(),
                     random < divide ? "agreement" : "reject",
-                    msg.getSender().getLocalName(), msg.getContent());
+                    msg.getSender().getLocalName(), msg.getContent());*/
         }
     }
 
