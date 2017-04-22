@@ -18,7 +18,7 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
 
     private ACLMessage msg;
     private int returnCode;
-    private int messagesReceived = 0;
+    private int messagesReceived;
 
     MessageTemplate template = new MessageTemplate((MessageTemplate.MatchExpression) aclMessage ->
             (aclMessage.getPerformative() == (ACLMessage.ACCEPT_PROPOSAL) ||
@@ -33,19 +33,22 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
 
     public void onStart() {
         myParentFSM = (PassengerFSMBehaviour) getParent();
+        messagesReceived = 0;
+        wakeupTime = (timeOut<0 ? Long.MAX_VALUE
+                :System.currentTimeMillis() + timeOut);
     }
 
     @Override
     public boolean done () {
-        return finished;
+        return finished || returnCode == PassengerFSMBehaviour.FORCE_REJECT;
     }
 
     @Override
     public void action()
     {
-        wakeupTime = (timeOut<0 ? Long.MAX_VALUE
-                :System.currentTimeMillis() + timeOut);
-        returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
+        if (returnCode == PassengerFSMBehaviour.FORCE_REJECT) {
+            returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
+        }
 
         msg = myAgent.receive(template);
 
@@ -76,11 +79,12 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
         if (m == null) {
             // Время вышло, не все ответы пришли
             returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
+            CitizenAgent.logger.info("Time is up, no ACCEPT received");
             return;
         }
 
         if (m.getPerformative() == ACLMessage.ACCEPT_PROPOSAL) {
-            CitizenAgent.logger.info("{} has an accepted proposal from {}",
+            CitizenAgent.logger.info("{} has an ACCEPTed proposal from {}",
                     myAgent.getLocalName(),
                     m.getSender().getLocalName());
             returnCode = PassengerFSMBehaviour.POSITIVE_CONDITION;
@@ -90,6 +94,10 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
                 messagesReceived--;
                 returnCode = PassengerFSMBehaviour.FORCE_REJECT;
                 myParentFSM.driverToRemove = msg.getSender().getLocalName();
+            } else if (messagesReceived == myParentFSM.suitableDrivers.size()) {
+                // Все ответы пришли, ACCEPT нет
+                returnCode = PassengerFSMBehaviour.NEGATIVE_CONDITION;
+                CitizenAgent.logger.info("All answers received, no ACCEPTed");
             }
         }
 

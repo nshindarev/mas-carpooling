@@ -18,7 +18,6 @@ import java.util.List;
  * Поиск предложений от водителей. Когда пассажир находит подходящего водителя,
  * он записывает его в персональный список.
  */
-// TODO: не находит, если пассажир появился раньше водителя
 public class SearchDriversOffersInYPBehaviour extends OneShotBehaviour {
 
     private CitizenAgent myCitizenAgent;

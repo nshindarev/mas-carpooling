@@ -32,7 +32,7 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
 
     private final String SEND_AGREE_TO_ACCEPTED_PROPOSAL_STATE = "Send agree to accepted proposal";
     private final String TRANSACTION_CONFIRMATION_STATE        = "Wait for transaction confirmation";
-    private final String SEND_CANCEL_STATE                     = "Send CANCEL to other drivers";
+    private final String FINALIZE_TRANSACTION                  = "Finalize transaction";
 
     public static final int POSITIVE_CONDITION =  1;
     public static final int NEGATIVE_CONDITION =  0;
@@ -52,14 +52,16 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
         registerState(new RemoveDriverFromList(), REMOVE_DRIVER_STATE);
         registerState(new SendAgreeToAcceptedProposalBehaviour(), SEND_AGREE_TO_ACCEPTED_PROPOSAL_STATE);
         registerState(new TransactionConfirmationReceiverBehaviour(a, Conversation.REPLY_TIME), TRANSACTION_CONFIRMATION_STATE);
-        registerLastState(new FinalizeTransactionBehaviour(), SEND_CANCEL_STATE);
+        registerLastState(new FinalizeTransactionBehaviour(), FINALIZE_TRANSACTION);
 
         // Регистрируем переходы
         registerDefaultTransition(SEARCH_DRIVERS_STATE, SEND_PROPOSALS_STATE);
         registerDefaultTransition(SEND_PROPOSALS_STATE, WAIT_FOR_ANSWERS_TO_PROPOSE_STATE);
 
         registerTransition(WAIT_FOR_ANSWERS_TO_PROPOSE_STATE, RAISE_OFFER_PRICE_STATE, NEGATIVE_CONDITION);
-        registerDefaultTransition(RAISE_OFFER_PRICE_STATE, SEARCH_DRIVERS_STATE);
+        registerDefaultTransition(RAISE_OFFER_PRICE_STATE, SEARCH_DRIVERS_STATE, new String[] {
+                WAIT_FOR_ANSWERS_TO_PROPOSE_STATE
+        });
 
         registerTransition(WAIT_FOR_ANSWERS_TO_PROPOSE_STATE, REMOVE_DRIVER_STATE, FORCE_REJECT);
         registerDefaultTransition(REMOVE_DRIVER_STATE, WAIT_FOR_ANSWERS_TO_PROPOSE_STATE);
@@ -68,7 +70,9 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
         registerDefaultTransition(SEND_AGREE_TO_ACCEPTED_PROPOSAL_STATE, TRANSACTION_CONFIRMATION_STATE);
 
         registerTransition(TRANSACTION_CONFIRMATION_STATE, WAIT_FOR_ANSWERS_TO_PROPOSE_STATE, NEGATIVE_CONDITION);
-        registerTransition(TRANSACTION_CONFIRMATION_STATE, SEND_CANCEL_STATE, POSITIVE_CONDITION);
+        registerTransition(TRANSACTION_CONFIRMATION_STATE, FINALIZE_TRANSACTION, POSITIVE_CONDITION);
+
+        // TODO: проверить работу поведений, где идёт разветвление (PROPOSALS ansewer, Transaction confirm)
 
     }
 

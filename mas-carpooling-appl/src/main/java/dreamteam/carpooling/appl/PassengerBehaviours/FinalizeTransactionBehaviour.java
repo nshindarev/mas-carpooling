@@ -40,7 +40,6 @@ public class FinalizeTransactionBehaviour extends OneShotBehaviour {
             }
         });
 
-        // TODO: выводить лог?
         CitizenAgent.logger.info("{} goes with driver {} for price {}",
                 myAgent.getLocalName(),
                 myParentFSM.acceptedProposal.getSender().getLocalName(),
