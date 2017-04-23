@@ -46,7 +46,7 @@ public class AcceptBestProposalsBehaviour extends OneShotBehaviour {
         }
 
 
-        //TODO: не надо этого делать, иначе с каким списком нам сверяться
+
         // убираем из пула все лучшие предложения, на которые уже ответили
         for (Offer offer:
                 myParentFSM.myCitizenAgent.getOffersPool()) {

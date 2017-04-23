@@ -73,7 +73,7 @@ public class CheckPassengerPoolBehaviour extends CyclicBehaviour {
     }
 
 
-    //TODO: неправильно высчитывается cd !!!
+
     /**
      *   pp < (pd - cd) < p0,
 

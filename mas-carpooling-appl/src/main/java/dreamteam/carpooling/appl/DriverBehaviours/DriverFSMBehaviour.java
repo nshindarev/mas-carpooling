@@ -82,7 +82,9 @@ public class DriverFSMBehaviour extends FSMBehaviour {
         );
         registerDefaultTransition(
                 REJECT_ALL_PROPOSALS_STATE,
-                WAIT_FOR_PROPOSALS_STATE // TODO: тут ещё возможно надо будет делать reset() ресивера, хз
+                WAIT_FOR_PROPOSALS_STATE, // TODO: проверить корректность обнуления ресивера
+                new String[] {WAIT_FOR_PROPOSALS_STATE}
+
         );
 
         registerTransition(

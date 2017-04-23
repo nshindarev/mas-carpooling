@@ -68,6 +68,12 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
     {
         returnCode = DriverFSMBehaviour.NEGATIVE_CONDITION;
 
+        ids_to_wait = new LinkedList<>();
+        for(Offer best_offer:
+                myParentFSM.myCitizenAgent.best_offer) {
+            ids_to_wait.add(best_offer.id.toString());
+        }
+
         msg = myAgent.receive(template);
 
         if( msg != null) {
@@ -137,14 +143,12 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
 
     public void reset() {
 
-        messagesReceived = 0;
-        ids_to_wait = new LinkedList<>();
         msg = null;
         finished = false;
 
         //TODO: здесь может быть косяк
-        myParentFSM.agent_sent_Cancel = null;
-        myParentFSM.agents_didnt_answer = null;
+        // myParentFSM.agent_sent_Cancel = null;
+        // myParentFSM.agents_didnt_answer = null;
 
         super.reset();
     }

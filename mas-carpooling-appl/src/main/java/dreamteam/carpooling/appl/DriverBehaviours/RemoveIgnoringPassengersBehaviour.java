@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.DriverBehaviours;
 
+import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Offer;
 import jade.core.behaviours.OneShotBehaviour;
 
@@ -42,6 +43,9 @@ public class RemoveIgnoringPassengersBehaviour extends OneShotBehaviour {
                     }
                 }
             }
+        }
+        else {
+            CitizenAgent.logger.error("отказали/не дождались, но пул отказов пустой");
         }
     }
 }

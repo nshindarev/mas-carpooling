@@ -45,6 +45,7 @@ public class CitizenAgent extends Agent {
     private FloydWarshallShortestPaths<String, MyWeightedEdge> shortestPaths = City.getShortestPaths();
 
     private double price;
+    private double price_by_my_car = Double.MAX_VALUE;
 
 
     /**
@@ -90,6 +91,9 @@ public class CitizenAgent extends Agent {
     }
     public void setNewRoad (GraphPath<String, MyWeightedEdge> input){
         this.myCurrentWay = input;
+    }
+    public void setNewRoad (List<String> input, double weight){
+        this.myCurrentWay = new GraphWalk<String, MyWeightedEdge>(city, input, weight);
     }
 
 
@@ -210,15 +214,15 @@ public class CitizenAgent extends Agent {
      */
     public double getCostByMyCar(){
         double sum = 0;
-        if (this.price == Double.MAX_VALUE){
+        if (this.price_by_my_car == Double.MAX_VALUE){
             for (MyWeightedEdge e:
                  getWayByMyCar().getEdgeList()) {
                 sum += e.get_weight();
             }
             sum *= car.getCostPerKilometer();
-            this.price = sum;
+            this.price_by_my_car = sum;
         }
-        else sum = this.price;
+        else sum = this.price_by_my_car;
         return sum;
     }
     public MyCityGraph<String, MyWeightedEdge> getCity() {
