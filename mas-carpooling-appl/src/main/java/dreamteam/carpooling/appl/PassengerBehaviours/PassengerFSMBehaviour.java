@@ -21,7 +21,7 @@ public class PassengerFSMBehaviour extends FSMBehaviour {
     public String driverToRemove;
     public ACLMessage acceptedProposal;
 
-    private CitizenAgent myCitizenAgent;
+    public CitizenAgent myCitizenAgent;
 
     private final String SEARCH_DRIVERS_STATE                  = "Search drivers";
     private final String SEND_PROPOSALS_STATE                  = "Send proposals";

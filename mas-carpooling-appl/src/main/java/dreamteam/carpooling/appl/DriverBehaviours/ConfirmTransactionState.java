@@ -89,13 +89,22 @@ public class ConfirmTransactionState extends OneShotBehaviour {
             myParentFSM.myCitizenAgent.offersPool.clear();
             // myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.);
             //myParentFSM.myCitizenAgent.best_offer.clear();
+
+            String s = "";
+            for (Offer best_offer:
+                 myParentFSM.myCitizenAgent.best_offer) {
+                    s += best_offer.message.getSender().getLocalName();
+                    s += " ";
+            }
+            myParentFSM.myCitizenAgent.logger.warn("Driver {} took passengers:  {}", myParentFSM.myCitizenAgent.getLocalName(), s );
         }
 
         else {
-            myParentFSM.myCitizenAgent.logger.error("Агент {} поехал сам ", myParentFSM.myCitizenAgent.getLocalName());
+            myParentFSM.myCitizenAgent.logger.warn("Агент {} поехал сам ", myParentFSM.myCitizenAgent.getLocalName());
         }
         myParentFSM.myCitizenAgent.deregister();
         myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myPassengerBehaviour);
+        myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myDriverBehaviour);
 
     }
 }

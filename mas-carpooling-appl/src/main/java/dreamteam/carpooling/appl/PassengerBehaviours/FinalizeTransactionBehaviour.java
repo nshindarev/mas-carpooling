@@ -40,10 +40,19 @@ public class FinalizeTransactionBehaviour extends OneShotBehaviour {
             }
         });
 
-        CitizenAgent.logger.error("{} goes with driver {} for price {}",
+        CitizenAgent.logger.info("{} goes with driver {} for price {}",
                 myAgent.getLocalName(),
                 myParentFSM.acceptedProposal.getSender().getLocalName(),
                 ((CitizenAgent) myAgent).getPrice());
+
+        try {
+            myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myDriverBehaviour);
+        }
+        catch (Exception ex){
+
+        }
+
+
 
     }
 }

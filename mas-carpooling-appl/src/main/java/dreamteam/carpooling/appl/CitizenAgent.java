@@ -33,9 +33,10 @@ public class CitizenAgent extends Agent {
 
 
     /**
-     *   Поведение-автомат для пассажира
+     *   Поведения-автоматы
      */
     public PassengerFSMBehaviour myPassengerBehaviour;
+    public DriverFSMBehaviour    myDriverBehaviour;
 
     /**
      *   wayWithMyCar  --- кратчайший путь на собственной машине
@@ -181,7 +182,8 @@ public class CitizenAgent extends Agent {
             }
 
 
-            addBehaviour(new DriverFSMBehaviour(this));
+            this.myDriverBehaviour = new DriverFSMBehaviour(this);
+            addBehaviour(myDriverBehaviour);
 
         }
 
