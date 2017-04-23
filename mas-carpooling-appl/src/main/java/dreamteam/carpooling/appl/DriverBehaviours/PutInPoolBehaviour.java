@@ -14,7 +14,12 @@ public class PutInPoolBehaviour extends OneShotBehaviour {
     public void action() {
         myParentFSM = (DriverFSMBehaviour) getParent();
 
-        // обновляем полученное предложение от пассажира в пуле предложений
-        myParentFSM.myCitizenAgent.updateOfferInPool(myParentFSM.offerToAdd);
+        if(myParentFSM.offerToAdd != null){
+            // обновляем полученное предложение от пассажира в пуле предложений
+            myParentFSM.myCitizenAgent.updateOfferInPool(myParentFSM.offerToAdd);
+        }
+        else{
+
+        }
     }
 }

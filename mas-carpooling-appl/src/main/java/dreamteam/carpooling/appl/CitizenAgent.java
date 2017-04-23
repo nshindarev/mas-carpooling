@@ -36,6 +36,11 @@ public class CitizenAgent extends Agent {
 
 
     /**
+     *   Поведение-автомат для водителя
+     */
+    public DriverFSMBehaviour myDriverBehaviour;
+
+    /**
      *   wayWithMyCar  --- кратчайший путь на собственной машине
      *   myCurrentWay  --- путь, который проделаем, заезжая за попутчиками
      *   shortestPaths --- перечень всех кратчайших путей между всеми точками города
@@ -123,6 +128,10 @@ public class CitizenAgent extends Agent {
 
         }
         this.offersPool.add(offer);
+
+        if(offersPool.size() == 0){
+            this.logger.warn("empty offer pool in agent {}", this.getLocalName());
+        }
     }
     public void deleteOfferFromPool(Offer offer){
         if (this.offersPool.contains(offer)) {
@@ -169,13 +178,8 @@ public class CitizenAgent extends Agent {
             getWayByMyCar();
             getCostByMyCar();
 
-            addBehaviour(new DriverFSMBehaviour(this));
-
-
-           //TODO: переместил перед подачей метода, может, зря
-           /* this.wayWithMyCar = null;
-            getWayByMyCar();
-            getCostByMyCar();*/
+            myDriverBehaviour = new DriverFSMBehaviour(this);
+            addBehaviour(myDriverBehaviour);
 
         }
 

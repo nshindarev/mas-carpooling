@@ -85,7 +85,7 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
                     ids_to_wait.remove(id);
                 }
 
-            CitizenAgent.logger.info("{} has {} received messages of {}",
+            CitizenAgent.logger.debug("{} has {} received messages of {}",
                     myAgent.getLocalName(),
                     messagesReceived,
                     myParentFSM.myCitizenAgent.best_offer.size());
@@ -160,9 +160,6 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
 
     @Override
     public int onEnd() {
-        // TODO: POSITIVE_CONDITION - все прислали, NEGATIVE_CONDITION - кто-то не прислал
-        returnCode = DriverFSMBehaviour.POSITIVE_CONDITION;
-        returnCode = DriverFSMBehaviour.NEGATIVE_CONDITION;
         return returnCode;
     }
 }

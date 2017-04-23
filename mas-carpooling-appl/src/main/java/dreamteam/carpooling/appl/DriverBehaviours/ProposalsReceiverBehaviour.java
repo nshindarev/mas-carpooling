@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.DriverBehaviours;
 
+import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Offer;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
@@ -38,6 +39,7 @@ public class ProposalsReceiverBehaviour extends SimpleBehaviour {
 
     @Override
     public boolean done () {
+
         return finished;
     }
 
@@ -49,6 +51,9 @@ public class ProposalsReceiverBehaviour extends SimpleBehaviour {
         if( msg != null) {
             finished = true;
             handle( msg );
+            if(myParentFSM.offerToAdd == null && finished){
+                CitizenAgent.logger.warn("didn't add any offer to {}", myParentFSM.myCitizenAgent.getLocalName());
+            }
             return;
         }
         long dt = wakeupTime - System.currentTimeMillis();
@@ -58,12 +63,13 @@ public class ProposalsReceiverBehaviour extends SimpleBehaviour {
             finished = true;
             handle( msg );
         }
+
     }
 
     public void handle(ACLMessage m) {
 
         if (m == null) {
-
+            CitizenAgent.logger.warn("{} received null Message", myParentFSM.myCitizenAgent.getLocalName());
         } else {
             myParentFSM.offerToAdd = new Offer(m);
         }

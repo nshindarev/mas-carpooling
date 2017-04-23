@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.DriverBehaviours;
 
+import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.MyWeightedEdge;
 import dreamteam.carpooling.appl.Util.Offer;
 import jade.core.behaviours.OneShotBehaviour;
@@ -29,7 +30,8 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
 
         if (checkInequality()) {
             returnCode = DriverFSMBehaviour.POSITIVE_CONDITION;
-        } else returnCode = DriverFSMBehaviour.NEGATIVE_CONDITION;
+        }
+        else returnCode = DriverFSMBehaviour.NEGATIVE_CONDITION;
         return returnCode;
     }
 
@@ -84,7 +86,7 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
     }
 
     /**
-     * pp < (pd - cd) < p0,
+     * pp < (cd - pd) < p0,
      * <p>
      * pp - цена, которую агент заплатит в качестве пассажира (постоянно повышается),
      * pd - суммарный профит для водителя, который он получит, если возьмёт множество пассажиров,
@@ -211,7 +213,8 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
 
             }
         }
-        rezult_vertices.add(myParentFSM.myCitizenAgent.getWayByMyCar().getEndVertex());
+        if(!rezult_vertices.get(rezult_vertices.size()-1).equals(myParentFSM.myCitizenAgent.getWayByMyCar().getEndVertex()))
+            rezult_vertices.add(myParentFSM.myCitizenAgent.getWayByMyCar().getEndVertex());
 
         cd = 0;
         for (int i = 1; i < rezult_vertices.size(); i++) {
@@ -231,16 +234,24 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
             if(newVertexList.size()!=0){
                 newVertexList.remove(newVertexList.size()-1);
             }
-            newVertexList.addAll(myParentFSM.myCitizenAgent.getShortestPaths().getShortestPathAsVertexList(rezult_vertices.get(i), rezult_vertices.get(i+1)));
-        }
 
-        this.myParentFSM.myCitizenAgent.setNewRoad(newVertexList, cd);
+            try {
+              newVertexList.addAll(myParentFSM.myCitizenAgent.getShortestPaths().getShortestPathAsVertexList(rezult_vertices.get(i), rezult_vertices.get(i+1)));
+            }
+            catch (NullPointerException ex){
+                CitizenAgent.logger.error("пытаемся сделать новый список размера " + newVertexList.size() );
+            }
+        }
+            this.myParentFSM.myCitizenAgent.setNewRoad(newVertexList, cd);
+
         /*
         GraphPath<String, MyWeightedEdge> new_way = new GraphWalk<String, MyWeightedEdge>(myParentFSM.myCitizenAgent.getCity(), rezult_vertices, cd);
         this.myParentFSM.myCitizenAgent.setNewRoad(new_way); */
 
-        if ((pp < (pd - cd)) && ((pd - cd) < p0)) return true;
-        else return false;
+        if ((pp < (cd - pd)))
+            return true;
+        else
+            return false;
     }
 
 }

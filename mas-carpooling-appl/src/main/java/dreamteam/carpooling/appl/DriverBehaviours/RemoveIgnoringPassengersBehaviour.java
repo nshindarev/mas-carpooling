@@ -23,7 +23,7 @@ public class RemoveIgnoringPassengersBehaviour extends OneShotBehaviour {
                 if (offer.id.toString().equals(myParentFSM.agent_sent_Cancel.toString())){
                     myParentFSM.myCitizenAgent.offersPool.remove(offer);
                     myParentFSM.myCitizenAgent.best_offer.remove(offer);
-                 }
+                }
 
             }
 
