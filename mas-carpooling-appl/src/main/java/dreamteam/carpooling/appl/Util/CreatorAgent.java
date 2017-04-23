@@ -52,6 +52,11 @@ public class CreatorAgent extends Agent {
         try {
             if (!isAutoGenerateAgents){
                 // Ручное создание агентов
+
+                AgentController secretary = cc.createNewAgent("secretary", "dreamteam.carpooling.appl.Util.StatsAgent",
+                        new Object[] { 4 });
+                secretary.start();
+
                 AgentController gosha   = cc.createNewAgent("gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
                 AgentController nastya  = cc.createNewAgent("nastya",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 3, 4 });
                 AgentController nick    = cc.createNewAgent("nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
@@ -70,6 +75,15 @@ public class CreatorAgent extends Agent {
 
         if (countAgents == null)
             countAgents = countAgentsDefault;
+
+        AgentController secretary;
+        try {
+            secretary = cc.createNewAgent("secretary",  "dreamteam.carpooling.appl.Util.StatsAgent",
+                    new Object[] { countAgents.toString() });
+            secretary.start();
+        } catch (StaleProxyException e) {
+            e.printStackTrace();
+        }
 
         Parameters agentParameters;
 
