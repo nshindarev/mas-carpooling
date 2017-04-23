@@ -118,7 +118,14 @@ public class CitizenAgent extends Agent {
             }
         }
     }
+    public void deleteOfferFromPool(Offer offer){
+        if (this.offersPool.contains(offer)) {
+            this.offersPool.remove(offer);
+            if(this.best_offer.contains(offer))
+                this.best_offer.remove(offer);
+        }
 
+    }
 
     public FloydWarshallShortestPaths<String, MyWeightedEdge> getShortestPaths() { return this.getShortestPaths(); }
 

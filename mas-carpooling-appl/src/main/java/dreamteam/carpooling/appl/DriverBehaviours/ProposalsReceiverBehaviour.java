@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.DriverBehaviours;
 
+import dreamteam.carpooling.appl.Util.Offer;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -62,9 +63,9 @@ public class ProposalsReceiverBehaviour extends SimpleBehaviour {
     public void handle(ACLMessage m) {
 
         if (m == null) {
-            // TODO: Время вышло, сообщения нет
+
         } else {
-            // TODO: Обрабатываем сообщение
+            myParentFSM.offerToAdd = new Offer(m);
         }
 
     }

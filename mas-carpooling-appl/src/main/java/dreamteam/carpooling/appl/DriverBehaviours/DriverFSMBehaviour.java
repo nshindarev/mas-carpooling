@@ -3,9 +3,12 @@ package dreamteam.carpooling.appl.DriverBehaviours;
 import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Conversation;
 import dreamteam.carpooling.appl.Util.Offer;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
+
+import java.util.List;
 
 /**
  * Сценарий для роли водителя
@@ -34,7 +37,8 @@ public class DriverFSMBehaviour extends FSMBehaviour {
      *   результаты работы состояний
      */
     public Offer offerToAdd;
-    public ACLMessage lastOffer;
+    public AID agent_sent_Cancel;
+    public List<String> agents_didnt_answer;
 
 
     // TODO: перенести по максимуму логику водителя из класса CitizenAgent
