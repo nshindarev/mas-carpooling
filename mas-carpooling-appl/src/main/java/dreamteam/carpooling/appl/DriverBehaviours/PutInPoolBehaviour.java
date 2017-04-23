@@ -18,8 +18,9 @@ public class PutInPoolBehaviour extends OneShotBehaviour {
             // обновляем полученное предложение от пассажира в пуле предложений
             myParentFSM.myCitizenAgent.updateOfferInPool(myParentFSM.offerToAdd);
         }
-        else{
 
+        if(myParentFSM.myCitizenAgent.offersPool.size()==0){
+            myParentFSM.myCitizenAgent.logger.error("offersPool пустой ");
         }
     }
 }

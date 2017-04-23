@@ -74,6 +74,10 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
             ids_to_wait.add(best_offer.id.toString());
         }
 
+       if(ids_to_wait.size() == 0){
+           finished = true;
+           return;
+       }
         msg = myAgent.receive(template);
 
         if( msg != null) {

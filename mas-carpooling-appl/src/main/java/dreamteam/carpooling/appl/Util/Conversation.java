@@ -12,7 +12,7 @@ public class Conversation {
     public static final int REPLY_TIME = 5000;
 
     public static final double START_PRICE = 10;
-    public static final double PRICE_STEP = 20;
+    public static final double PRICE_STEP = 100;
 
     public static final int MAX_ITER_WITH_NO_ANSWERS = 30;
 

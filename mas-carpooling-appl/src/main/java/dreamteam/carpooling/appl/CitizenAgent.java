@@ -1,9 +1,6 @@
 package dreamteam.carpooling.appl;
 
-import dreamteam.carpooling.appl.DriverBehaviours.CheckPassengerPoolBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.DriverFSMBehaviour;
-import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
-import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 
 import dreamteam.carpooling.appl.PassengerBehaviours.PassengerFSMBehaviour;
 import dreamteam.carpooling.appl.Util.*;
@@ -36,9 +33,9 @@ public class CitizenAgent extends Agent {
 
 
     /**
-     *   Поведение-автомат для водителя
+     *   Поведение-автомат для пассажира
      */
-    public DriverFSMBehaviour myDriverBehaviour;
+    public PassengerFSMBehaviour myPassengerBehaviour;
 
     /**
      *   wayWithMyCar  --- кратчайший путь на собственной машине
@@ -175,18 +172,24 @@ public class CitizenAgent extends Agent {
         // Поведения для роли водителя
         if (car != null) {
             this.wayWithMyCar = null;
-            getWayByMyCar();
-            getCostByMyCar();
+            try {
+                getWayByMyCar();
+                getCostByMyCar();
+            }
+            catch (NullPointerException ex){
+                this.logger.error(ex.getMessage());
+            }
 
-            myDriverBehaviour = new DriverFSMBehaviour(this);
-            addBehaviour(myDriverBehaviour);
+
+            addBehaviour(new DriverFSMBehaviour(this));
 
         }
 
         this.greed = Math.random() * 0.15;
 
         // Поведения для роли пассажира
-        addBehaviour(new PassengerFSMBehaviour(this));
+        myPassengerBehaviour = new PassengerFSMBehaviour(this);
+        addBehaviour(myPassengerBehaviour);
 
 
     }
