@@ -1,6 +1,7 @@
 package dreamteam.carpooling.appl;
 
 import dreamteam.carpooling.appl.DriverBehaviours.CheckPassengerPoolBehaviour;
+import dreamteam.carpooling.appl.DriverBehaviours.DriverFSMBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.HandlePassengersOffersBehaviour;
 import dreamteam.carpooling.appl.DriverBehaviours.RegisterInYPBehaviour;
 
@@ -159,13 +160,17 @@ public class CitizenAgent extends Agent {
 
         // Поведения для роли водителя
         if (car != null) {
-            addBehaviour(new RegisterInYPBehaviour());
-            addBehaviour(new HandlePassengersOffersBehaviour());
-            //addBehaviour(new CheckPassengerPoolBehaviour());
-
             this.wayWithMyCar = null;
             getWayByMyCar();
             getCostByMyCar();
+
+            addBehaviour(new DriverFSMBehaviour(this));
+
+
+           //TODO: переместил перед подачей метода, может, зря
+           /* this.wayWithMyCar = null;
+            getWayByMyCar();
+            getCostByMyCar();*/
 
         }
 
@@ -221,6 +226,9 @@ public class CitizenAgent extends Agent {
 
 
 
+    public void deregister(){
+        this.takeDown();
+    }
     @Override
     protected void takeDown() {
         // Deregister from the yellow pages

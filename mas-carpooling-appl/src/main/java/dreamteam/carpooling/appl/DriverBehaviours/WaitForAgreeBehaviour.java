@@ -37,6 +37,8 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
 
     public void onStart() {
 
+        myParentFSM = (DriverFSMBehaviour) getParent();
+
         for(Offer best_offer:
                 myParentFSM.myCitizenAgent.best_offer) {
             ids_to_wait.add(best_offer.id.toString());

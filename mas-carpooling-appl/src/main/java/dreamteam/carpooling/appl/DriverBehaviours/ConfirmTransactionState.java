@@ -44,6 +44,9 @@ public class ConfirmTransactionState extends OneShotBehaviour {
 
         //TODO: удалиться из YP и отменить сценарий пассажира
         myParentFSM.myCitizenAgent.offersPool.clear();
-        myParentFSM.myCitizenAgent.best_offer.clear();
+        //myParentFSM.myCitizenAgent.best_offer.clear();
+
+        myParentFSM.myCitizenAgent.deregister();
+
     }
 }

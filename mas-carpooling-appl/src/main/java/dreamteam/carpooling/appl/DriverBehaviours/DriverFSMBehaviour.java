@@ -46,6 +46,10 @@ public class DriverFSMBehaviour extends FSMBehaviour {
     public DriverFSMBehaviour(Agent a) {
         super(a);
 
+
+        myCitizenAgent = (CitizenAgent) myAgent;
+        myCitizenAgent.setPrice(Conversation.START_PRICE);
+
         // Регистрируем состояния
         registerFirstState(new RegisterInYPBehaviour(), REGISTER_IN_YP_STATE); // TODO: не забудь убрать это из класса Citizen! А то он зарегается дважды
         registerState(new ProposalsReceiverBehaviour(a, -1), WAIT_FOR_PROPOSALS_STATE); // TODO: второй параметр конструктора = тайм-аут на получение сообщений
