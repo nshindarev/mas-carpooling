@@ -12,15 +12,20 @@ import jade.domain.FIPAException;
 import org.jgrapht.GraphPath;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  *  Регистрация в сервисе Yellow Pages в качестве водителя
  */
 public class RegisterInYPBehaviour extends OneShotBehaviour {
+    private DriverFSMBehaviour myParentFSM;
+
 
     @Override
     public void action() {
+
+        myParentFSM = (DriverFSMBehaviour) getParent();
 
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(myAgent.getAID());
@@ -48,6 +53,11 @@ public class RegisterInYPBehaviour extends OneShotBehaviour {
         try {
             DFService.register(myAgent, dfd);
             CitizenAgent.logger.info("{} is registered as a driver", myAgent.getAID().getLocalName());
+
+            //init offer pool
+            myParentFSM.myCitizenAgent.offersPool = new LinkedList<>();
+            myParentFSM.myCitizenAgent.best_offer = new LinkedList<>();
+
         }
         catch (FIPAException fe) {
             fe.printStackTrace();

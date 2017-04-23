@@ -106,7 +106,7 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
 
             // Время вышло, не все ответы пришли
             returnCode = DriverFSMBehaviour.NEGATIVE_CONDITION;
-            CitizenAgent.logger.info("Time is up, not all Agrees received");
+            CitizenAgent.logger.info("... Time is up, received {} of {} AGREES", messagesReceived, myParentFSM.myCitizenAgent.best_offer.size() );
 
             /**
              *  время вышло, запоминаем молчунов и ливаем

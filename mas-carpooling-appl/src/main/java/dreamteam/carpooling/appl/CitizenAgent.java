@@ -115,9 +115,10 @@ public class CitizenAgent extends Agent {
 
             if (in_pool.id.getName().equals(offer.id.getName())) {
                 this.offersPool.remove(in_pool);
-                this.offersPool.add(offer);
             }
+
         }
+        this.offersPool.add(offer);
     }
     public void deleteOfferFromPool(Offer offer){
         if (this.offersPool.contains(offer)) {
@@ -128,7 +129,7 @@ public class CitizenAgent extends Agent {
 
     }
 
-    public FloydWarshallShortestPaths<String, MyWeightedEdge> getShortestPaths() { return this.getShortestPaths(); }
+    public FloydWarshallShortestPaths<String, MyWeightedEdge> getShortestPaths() { return this.shortestPaths; }
 
     @Override
     protected void setup() {
