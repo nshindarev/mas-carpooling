@@ -116,18 +116,9 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
          *    val == False --> нужно доставить в эту точку
          */
 
-        //GraphPath<String, MyWeightedEdge> rezult_path = new GraphWalk<String, MyWeightedEdge>();
-
         List<String> rezult_vertices = new LinkedList<>();
         Map<Offer, Boolean> listToVisit = new HashMap<>();
-        List<String> list_to_search_nearest = new LinkedList<>();
-        /**
-         *  инициализируем обновляющийся список вершин в маршруте
-         */
-        for (String in_way_by_my_car:
-             myParentFSM.myCitizenAgent.getWayByMyCar().getVertexList()) {
-            list_to_search_nearest.add(in_way_by_my_car);
-        }
+
 
 
         /**
@@ -156,9 +147,6 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
                     listToVisit.remove(offer);
                     listToVisit.put(offer, Boolean.FALSE);
                 }
-
-                //TODO: было так
-                //listToVisit.remove(offer);
             }
 
         }
@@ -178,22 +166,21 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
 
             for (Offer in_list :
                     listToVisit.keySet()) {
-                for (String in_trip:
-                     list_to_search_nearest) {
 
                     GraphPath<String, MyWeightedEdge> way_to_next =
-                            (listToVisit.get(in_list)) ? myParentFSM.myCitizenAgent.getShortestPaths().getShortestPath(in_trip, in_list.start) :
-                                    myParentFSM.myCitizenAgent.getShortestPaths().getShortestPath(in_trip, in_list.finish);
+                            (listToVisit.get(in_list)) ? myParentFSM.myCitizenAgent.getShortestPaths().getShortestPath(cur_vertex, in_list.start) :
+                                    myParentFSM.myCitizenAgent.getShortestPaths().getShortestPath(cur_vertex, in_list.finish);
 
                     if (way_to_next.getWeight() < distance_to_nearest) {
                         nearest_passenger = way_to_next.getEndVertex();
                         distance_to_nearest = way_to_next.getWeight();
-                        nearest_in_trip_to_save = in_trip;
+                        nearest_in_trip_to_save = cur_vertex;
                     }
-                }
             }
 
-            list_to_search_nearest.add(nearest_passenger);
+            // данная реализация смотрит ближайшие точки в нашем маршруте
+            // list_to_search_nearest.add(nearest_passenger);
+
 
 
             /**
@@ -204,6 +191,8 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
                 rezult_vertices.add(nearest_in_trip_to_save);
 
             rezult_vertices.add(nearest_passenger);
+            cur_vertex = nearest_passenger;
+
 
             for (Offer offer :                                                                                               //... обновляем список необходимых посещений
                     listToVisit.keySet()) {

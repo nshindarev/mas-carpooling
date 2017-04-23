@@ -46,7 +46,7 @@ public class Parser {
     }
     public Parser (){
         try {
-            this.city_file = new File("mas-carpooling-appl/src/main/resources/small_city_equal_weight.gml");
+            this.city_file = new File("mas-carpooling-appl/src/main/resources/small_city.gml");
         }
         catch (Exception ex){
             logger.error(ex.getMessage());
