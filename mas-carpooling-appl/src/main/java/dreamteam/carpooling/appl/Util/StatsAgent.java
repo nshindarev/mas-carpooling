@@ -81,7 +81,7 @@ public class StatsAgent extends Agent {
             @Override
             public boolean done() {
                 if (agentsCounter > agentsAmount) {
-                    StatsAgent.logger.info("Error: too many agent counted ({} of {})",
+                    StatsAgent.logger.error("Error: too many agent counted ({} of {})",
                             agentsCounter, agentsAmount);
                     myAgent.doDelete();
                     return false;
