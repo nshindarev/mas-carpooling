@@ -1,6 +1,5 @@
 package dreamteam.carpooling.appl.Util;
 
-import com.sun.tools.javac.util.Convert;
 import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
