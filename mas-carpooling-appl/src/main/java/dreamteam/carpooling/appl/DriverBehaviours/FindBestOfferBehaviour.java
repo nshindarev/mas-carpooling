@@ -268,7 +268,7 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
         GraphPath<String, MyWeightedEdge> new_way = new GraphWalk<String, MyWeightedEdge>(myParentFSM.myCitizenAgent.getCity(), rezult_vertices, cd);
         this.myParentFSM.myCitizenAgent.setNewRoad(new_way); */
 
-        if (pp < p0) {
+        if (pp >= p0) {
             CitizenAgent.logger.info("{} goes by his/her car", myAgent.getLocalName());
             myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myPassengerBehaviour);
         }

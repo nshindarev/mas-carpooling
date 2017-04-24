@@ -11,7 +11,7 @@ public class CreatorAgent extends Agent {
 
     private final Integer countAgentsDefault = 5;
     private final Integer maxCapacityCarConst = 5;
-    private final Integer maxCoefRandCost = 9;
+    private final Integer maxCoefRandCost = 3;
     private Integer maxVertexCity = 11;
 
     @Override
