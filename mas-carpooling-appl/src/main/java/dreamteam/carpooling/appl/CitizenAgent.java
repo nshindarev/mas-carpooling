@@ -9,6 +9,7 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
+import jade.lang.acl.ACLMessage;
 import org.jgrapht.GraphPath;
 
 import org.jgrapht.alg.FloydWarshallShortestPaths;
@@ -185,6 +186,10 @@ public class CitizenAgent extends Agent {
             try {
                 getWayByMyCar();
                 getCostByMyCar();
+                ACLMessage message = new ACLMessage(ACLMessage.INFORM);
+                message.setContent("sc" +  getCostByMyCar());
+                message.addReceiver(new AID(Conversation.SECRETARY_NAME, AID.ISLOCALNAME));
+                this.send(message);
             }
             catch (NullPointerException ex){
                 this.logger.error(ex.getMessage());
