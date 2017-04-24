@@ -57,7 +57,7 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
 
         int n = offers_pool.size();
         double offers_profit = 0;
-        double best_profit = Double.MIN_VALUE;
+        double best_profit = 1 - Double.MAX_VALUE;
 
         // мы можем взять не больше человек, чем вместит в себя машина
         int allMasks = ((1 << n) < (this.myParentFSM.myCitizenAgent.getCarCapacity()+1) ? (1 << n) : (this.myParentFSM.myCitizenAgent.getCarCapacity()+1));
@@ -94,12 +94,14 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
                     }
                 }
 
-                //break;
+              //  break;
 
                 }
             }
+
         if (best_offer_combo.size() == 0)
             CitizenAgent.logger.warn("Не нашли хороших предложений для {}", myParentFSM.myCitizenAgent.getLocalName());
+        else CitizenAgent.logger.debug("нашли хорошее предложение для {} = {}", myParentFSM.myCitizenAgent.getLocalName(), offers_profit);
         return best_offer_combo;
     }
 
@@ -266,7 +268,7 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
         GraphPath<String, MyWeightedEdge> new_way = new GraphWalk<String, MyWeightedEdge>(myParentFSM.myCitizenAgent.getCity(), rezult_vertices, cd);
         this.myParentFSM.myCitizenAgent.setNewRoad(new_way); */
 
-        if (pp < p0) {
+        if (pp >= p0) {
             CitizenAgent.logger.info("{} goes by his/her car", myAgent.getLocalName());
             myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myPassengerBehaviour);
         }
