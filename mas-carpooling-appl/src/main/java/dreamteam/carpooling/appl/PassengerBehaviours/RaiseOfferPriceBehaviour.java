@@ -16,11 +16,11 @@ public class RaiseOfferPriceBehaviour extends OneShotBehaviour {
         CitizenAgent myCitizenAgent = (CitizenAgent) myAgent;
         myCitizenAgent.setPrice(myCitizenAgent.getPrice() + Conversation.PRICE_STEP);
         if (myCitizenAgent.getPrice() > 3000) {
-            ACLMessage stats = new ACLMessage(ACLMessage.INFORM);
+            /*ACLMessage stats = new ACLMessage(ACLMessage.INFORM);
             stats.addReceiver(new AID(Conversation.SECRETARY_NAME, AID.ISLOCALNAME));
             stats.setOntology(Conversation.CARPOOLING_ONTOLOGY);
             stats.setContent(Conversation.NOT_FOUND_DRIVER);
-            myCitizenAgent.send(stats);
+            myCitizenAgent.send(stats);*/
             myCitizenAgent.removeBehaviour(myCitizenAgent.myPassengerBehaviour);
         } else
             CitizenAgent.logger.info("{} raises price to {}",

@@ -118,7 +118,7 @@ public class ConfirmTransactionState extends OneShotBehaviour {
             myParentFSM.myCitizenAgent.logger.debug("Агент {} поехал сам ", myParentFSM.myCitizenAgent.getLocalName());
         }
         myParentFSM.myCitizenAgent.deregister();
-        //myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myPassengerBehaviour);
+        myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myPassengerBehaviour);
         myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myDriverBehaviour);
 
     }

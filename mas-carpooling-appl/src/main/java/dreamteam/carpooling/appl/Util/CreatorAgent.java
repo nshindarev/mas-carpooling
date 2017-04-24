@@ -46,6 +46,12 @@ public class CreatorAgent extends Agent {
             countDrivers = countAgents;
         }
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         ContainerController cc = getContainerController();
         AgentController agent;
 
@@ -54,16 +60,16 @@ public class CreatorAgent extends Agent {
                 // Ручное создание агентов
 
                 AgentController secretary = cc.createNewAgent("secretary", "dreamteam.carpooling.appl.Util.StatsAgent",
-                        new Object[] { 4 });
+                        new Object[] { 2 });
                 secretary.start();
 
-                AgentController gosha   = cc.createNewAgent("gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
-                AgentController nastya  = cc.createNewAgent("nastya",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 3, 4 });
-                AgentController nick    = cc.createNewAgent("nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
-                AgentController iskrich = cc.createNewAgent("iskrich", "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 7, 3, 10 });
+                AgentController gosha   = cc.createNewAgent("agent_gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
+                AgentController nastya  = cc.createNewAgent("agent_nastya",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 3, 4 });
+                AgentController nick    = cc.createNewAgent("agent_nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
+                AgentController iskrich = cc.createNewAgent("agent_iskrich", "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
 
-                gosha.start();
-                nastya.start();
+//                gosha.start();
+//                nastya.start();
                 nick.start();
                 iskrich.start();
                 return;

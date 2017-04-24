@@ -49,7 +49,7 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
         template = new MessageTemplate(aclMessage ->
                         aclMessage.getPerformative() == (ACLMessage.AGREE)||
                         aclMessage.getPerformative() == (ACLMessage.CANCEL)&&
-                        ids_to_wait.contains(aclMessage.getSender())); // Шаблон для предложений
+                        ids_to_wait.contains(aclMessage.getSender().getLocalName())); // Шаблон для предложений
 
         wakeupTime = (timeOut<0 ? Long.MAX_VALUE
                 :System.currentTimeMillis() + timeOut);
@@ -71,7 +71,7 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
         ids_to_wait = new LinkedList<>();
         for(Offer best_offer:
                 myParentFSM.myCitizenAgent.best_offer) {
-            ids_to_wait.add(best_offer.id.toString());
+            ids_to_wait.add(best_offer.id.getLocalName());
         }
 
        if(ids_to_wait.size() == 0){
@@ -116,7 +116,7 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
 
             // Время вышло, не все ответы пришли
             returnCode = DriverFSMBehaviour.NEGATIVE_CONDITION;
-            CitizenAgent.logger.info("... Time is up, received {} of {} AGREES", messagesReceived, myParentFSM.myCitizenAgent.best_offer.size() );
+            CitizenAgent.logger.warn("Time is up, received {} of {} AGREES", messagesReceived, myParentFSM.myCitizenAgent.best_offer.size() );
 
             /**
              *  время вышло, запоминаем молчунов и ливаем
@@ -132,7 +132,7 @@ public class WaitForAgreeBehaviour extends SimpleBehaviour {
 
                myParentFSM.agent_sent_Cancel = m.getSender();
                returnCode = DriverFSMBehaviour.NEGATIVE_CONDITION;
-               CitizenAgent.logger.info("Agent {} CANCELED his query", m.getSender());
+               CitizenAgent.logger.info("Agent {} CANCELED his query", m.getSender().getLocalName());
                return;
            }
            else { // Performative = AGREE

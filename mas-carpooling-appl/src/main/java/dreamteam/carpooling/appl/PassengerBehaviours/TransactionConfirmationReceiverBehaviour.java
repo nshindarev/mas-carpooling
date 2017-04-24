@@ -47,7 +47,7 @@ public class TransactionConfirmationReceiverBehaviour extends SimpleBehaviour {
     @Override
     public void action()
     {
-        msg = myAgent.receive(template);
+        msg = myAgent.blockingReceive(template, timeOut);
 
         if( msg != null) {
             finished = true;
