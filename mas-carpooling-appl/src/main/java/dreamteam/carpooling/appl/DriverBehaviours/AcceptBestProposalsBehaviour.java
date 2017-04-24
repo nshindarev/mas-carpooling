@@ -7,6 +7,7 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,18 +53,23 @@ public class AcceptBestProposalsBehaviour extends OneShotBehaviour {
                 myParentFSM.myCitizenAgent.getOffersPool()) {
             not_best_offer.add(offer);
         }
-        for (Offer best_offer:
-             myParentFSM.myCitizenAgent.getBestOffer()) {
-            for (Offer simple_offer:
-                 not_best_offer) {
+        try{
+            for (Offer best_offer:
+                    myParentFSM.myCitizenAgent.getBestOffer()) {
+                Iterator<Offer> iter = not_best_offer.iterator();
 
-                if (best_offer.id.getName().equals(simple_offer.id.getName())){
-                    not_best_offer.remove(simple_offer);
+                while (iter.hasNext()) {
+                    Offer str = iter.next();
+
+                    if (best_offer.id.getName().equals(str.id.getName()))
+                        iter.remove();
                 }
-
             }
-
         }
+        catch (Exception ex){
+            myParentFSM.myCitizenAgent.logger.error(ex.getMessage());
+        }
+
 
         // для каждого из оставшихся предложений из пула генерим REJECT
         for (Offer offer:

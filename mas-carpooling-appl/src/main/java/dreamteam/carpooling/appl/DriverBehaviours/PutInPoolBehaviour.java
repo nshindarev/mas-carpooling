@@ -1,5 +1,6 @@
 package dreamteam.carpooling.appl.DriverBehaviours;
 
+import dreamteam.carpooling.appl.Util.Offer;
 import jade.core.behaviours.OneShotBehaviour;
 
 /**
@@ -14,9 +15,16 @@ public class PutInPoolBehaviour extends OneShotBehaviour {
     public void action() {
         myParentFSM = (DriverFSMBehaviour) getParent();
 
+        // обновляем полученное предложение от пассажира в пуле предложений
         if(myParentFSM.offerToAdd != null){
-            // обновляем полученное предложение от пассажира в пуле предложений
-            myParentFSM.myCitizenAgent.updateOfferInPool(myParentFSM.offerToAdd);
+            if(myParentFSM.offerToAdd.size()>1){
+                myParentFSM.myCitizenAgent.logger.trace(">1 offers received");
+            }
+            for (Offer offer:
+                 myParentFSM.offerToAdd) {
+                myParentFSM.myCitizenAgent.updateOfferInPool(offer);
+            }
+
         }
 
         if(myParentFSM.myCitizenAgent.offersPool.size()==0){

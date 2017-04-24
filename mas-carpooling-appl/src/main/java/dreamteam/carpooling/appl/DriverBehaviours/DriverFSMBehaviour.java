@@ -37,7 +37,7 @@ public class DriverFSMBehaviour extends FSMBehaviour {
     /**
      *   поля для различных состояний
      */
-    public Offer offerToAdd;
+    public List<Offer> offerToAdd = new LinkedList<>();
     public AID agent_sent_Cancel;
     public List<String> agents_didnt_answer;
 
@@ -112,7 +112,7 @@ public class DriverFSMBehaviour extends FSMBehaviour {
         registerDefaultTransition(
                 REMOVE_IGNORING_PASSENGERS_STATE,
                 (myCitizenAgent.offersPool.size()>0)?FIND_BEST_OFFER_STATE:WAIT_FOR_PROPOSALS_STATE,
-                new String[]{ WAIT_FOR_AGREE_STATE }
+                new String[]{ WAIT_FOR_AGREE_STATE, WAIT_FOR_PROPOSALS_STATE }
         );
 
     }
