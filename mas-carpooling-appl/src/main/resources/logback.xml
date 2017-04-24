@@ -18,7 +18,7 @@
 
     <logger name="dreamteam.carpooling.Main"              level="trace"   additivity="false"><appender-ref ref="STDOUT"/></logger>
     <logger name="dreamteam.carpooling"                   level="info"    additivity="false"><appender-ref ref="STDOUT"/></logger>
-    <logger name="dreamteam.carpooling.appl.CitizenAgent" level="debug"   additivity="false"><appender-ref ref="STDOUT"/></logger>
+    <logger name="dreamteam.carpooling.appl.CitizenAgent" level="info"   additivity="false"><appender-ref ref="STDOUT"/></logger>
     <!-- root -->
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

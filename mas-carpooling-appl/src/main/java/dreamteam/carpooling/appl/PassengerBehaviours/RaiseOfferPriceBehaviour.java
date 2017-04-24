@@ -23,7 +23,7 @@ public class RaiseOfferPriceBehaviour extends OneShotBehaviour {
             myCitizenAgent.send(stats);*/
             myCitizenAgent.removeBehaviour(myCitizenAgent.myPassengerBehaviour);
         } else
-            CitizenAgent.logger.info("{} raises price to {}",
+            CitizenAgent.logger.debug("{} raises price to {}",
                     myAgent.getLocalName(),
                     myCitizenAgent.getPrice());
     }
