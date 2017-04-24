@@ -109,6 +109,15 @@ public class CitizenAgent extends Agent {
     public String getFinish() {
         return finish;
     }
+
+    /**
+     *   для статистики
+     */
+    public List<String> getFinalRoadVertexes(){
+        return this.getCurrentRoute().getVertexList();
+    }
+
+
     public double getGreed()  { return greed; }
 
     /**

@@ -13,7 +13,7 @@ public class RaiseOfferPriceBehaviour extends OneShotBehaviour {
     public void action() {
         CitizenAgent myCitizenAgent = (CitizenAgent) myAgent;
         myCitizenAgent.setPrice(myCitizenAgent.getPrice() + Conversation.PRICE_STEP);
-        CitizenAgent.logger.info("{} raises price to {}",
+        CitizenAgent.logger.trace("{} raises price to {}",
                 myAgent.getLocalName(),
                 myCitizenAgent.getPrice());
     }

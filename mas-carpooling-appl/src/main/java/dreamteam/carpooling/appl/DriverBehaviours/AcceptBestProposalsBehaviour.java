@@ -40,7 +40,7 @@ public class AcceptBestProposalsBehaviour extends OneShotBehaviour {
 
             myParentFSM.getAgent().send(reply);
 
-            CitizenAgent.logger.info("{} driver ACCEPTED proposal from {}",
+            CitizenAgent.logger.debug("{} driver ACCEPTED proposal from {}",
                     myAgent.getLocalName(),
                     offer.message.getSender().getLocalName());
         }
@@ -80,7 +80,7 @@ public class AcceptBestProposalsBehaviour extends OneShotBehaviour {
 
             myParentFSM.getAgent().send(reply);
 
-            CitizenAgent.logger.info("{} driver REJECTED proposal from {}",
+            CitizenAgent.logger.debug("{} driver REJECTED proposal from {}",
                     myAgent.getLocalName(),
                     offer.message.getSender().getLocalName());
 

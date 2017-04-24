@@ -39,7 +39,7 @@ public class ConfirmTransactionState extends OneShotBehaviour {
 
                 myParentFSM.getAgent().send(reply);
 
-                CitizenAgent.logger.info("{} driver AGREED driving with proposal from {}",
+                CitizenAgent.logger.debug("{} driver AGREED driving with proposal from {}",
                         myAgent.getLocalName(),
                         offer.message.getSender().getLocalName());
 
@@ -96,11 +96,11 @@ public class ConfirmTransactionState extends OneShotBehaviour {
                     s += best_offer.message.getSender().getLocalName();
                     s += " ";
             }
-            myParentFSM.myCitizenAgent.logger.warn("Driver {} took passengers:  {}", myParentFSM.myCitizenAgent.getLocalName(), s );
+            myParentFSM.myCitizenAgent.logger.debug("Driver {} took passengers:  {}", myParentFSM.myCitizenAgent.getLocalName(), s );
         }
 
         else {
-            myParentFSM.myCitizenAgent.logger.warn("Агент {} поехал сам ", myParentFSM.myCitizenAgent.getLocalName());
+            myParentFSM.myCitizenAgent.logger.debug("Агент {} поехал сам ", myParentFSM.myCitizenAgent.getLocalName());
         }
         myParentFSM.myCitizenAgent.deregister();
         myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myPassengerBehaviour);

@@ -8,6 +8,7 @@ import jade.core.Agent;
 import jade.core.behaviours.FSMBehaviour;
 import jade.lang.acl.ACLMessage;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -34,14 +35,13 @@ public class DriverFSMBehaviour extends FSMBehaviour {
     public static final int NEGATIVE_CONDITION = 0;
 
     /**
-     *   результаты работы состояний
+     *   поля для различных состояний
      */
     public Offer offerToAdd;
     public AID agent_sent_Cancel;
     public List<String> agents_didnt_answer;
 
 
-    // TODO: перенести по максимуму логику водителя из класса CitizenAgent
 
     public DriverFSMBehaviour(Agent a) {
         super(a);
@@ -115,6 +115,15 @@ public class DriverFSMBehaviour extends FSMBehaviour {
                 new String[]{ WAIT_FOR_AGREE_STATE }
         );
 
+    }
+
+    public List<String> getPassengersList (){
+        List<String> to_return = new LinkedList<>();
+        for (Offer best_offer:
+                myCitizenAgent.best_offer){
+            to_return.add(best_offer.message.getSender().getLocalName());
+        }
+        return to_return;
     }
 
 }

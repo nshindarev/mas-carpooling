@@ -54,7 +54,7 @@ public class ProposalsAnswersReceiverBehaviour extends SimpleBehaviour {
 
         if(msg != null) {
             messagesReceived++;
-            CitizenAgent.logger.info("{} has {} received messages of {}",
+            CitizenAgent.logger.trace("{} has {} received messages of {}",
                     myAgent.getLocalName(),
                     messagesReceived,
                     myParentFSM.suitableDrivers.size());

@@ -13,7 +13,7 @@ public class RemoveDriverFromList extends OneShotBehaviour {
     @Override
     public void action() {
         myParentFSM = (PassengerFSMBehaviour) getParent();
-        CitizenAgent.logger.info("{} pwned by {}", myAgent.getLocalName(), myParentFSM.driverToRemove);
+        CitizenAgent.logger.debug("{} pwned by {}", myAgent.getLocalName(), myParentFSM.driverToRemove);
         myParentFSM.suitableDrivers.removeIf(
                 aid -> aid.getLocalName().equals(myParentFSM.driverToRemove)
         );

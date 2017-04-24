@@ -36,7 +36,7 @@ public class RejectAllProposalsBehaviour extends OneShotBehaviour {
 
             myParentFSM.getAgent().send(reply);
 
-            CitizenAgent.logger.info("{} driver REJECTED proposal from {}",
+            CitizenAgent.logger.debug("{} driver REJECTED proposal from {}",
                     myAgent.getLocalName(),
                     offer.message.getSender().getLocalName());
 

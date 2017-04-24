@@ -27,7 +27,7 @@ public class SendAgreeToAcceptedProposalBehaviour extends OneShotBehaviour {
 
         myParentFSM.getAgent().send(reply);
 
-        CitizenAgent.logger.info("{} sent AGREE to driver {}",
+        CitizenAgent.logger.debug("{} sent AGREE to driver {}",
                 myAgent.getLocalName(),
                 myParentFSM.acceptedProposal.getSender().getLocalName());
     }
