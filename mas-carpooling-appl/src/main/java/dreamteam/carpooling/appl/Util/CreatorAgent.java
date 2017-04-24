@@ -57,10 +57,10 @@ public class CreatorAgent extends Agent {
                         new Object[] { 4 });
                 secretary.start();
 
-                AgentController gosha   = cc.createNewAgent("gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
-                AgentController nastya  = cc.createNewAgent("nastya",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 3, 4 });
-                AgentController nick    = cc.createNewAgent("nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
-                AgentController iskrich = cc.createNewAgent("iskrich", "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 7, 3, 10 });
+                AgentController gosha   = cc.createNewAgent("agent_gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
+                AgentController nastya  = cc.createNewAgent("agent_nastya",  "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 3, 4 });
+                AgentController nick    = cc.createNewAgent("agent_nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
+                AgentController iskrich = cc.createNewAgent("agent_iskrich", "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 7, 3, 10 });
 
                 gosha.start();
                 nastya.start();

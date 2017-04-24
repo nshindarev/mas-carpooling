@@ -42,6 +42,8 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
             CitizenAgent.logger.error("Пустой пул для {}", myParentFSM.myCitizenAgent.getLocalName());
         }
         myParentFSM.myCitizenAgent.best_offer = analyzeOffersPool();
+        if (myParentFSM.myCitizenAgent.best_offer.size()>0)
+            this.myParentFSM.myCitizenAgent.logger.info("!!! Best Offer Pool > 0 {}", myParentFSM.myCitizenAgent.getLocalName());
     }
 
     /**
