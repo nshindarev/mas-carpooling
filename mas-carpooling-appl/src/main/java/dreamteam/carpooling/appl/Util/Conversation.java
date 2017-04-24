@@ -10,7 +10,7 @@ public class Conversation {
     public static final String NO_SEATS = "no-seats";
     public static final String NOT_FOUND_DRIVER = "fail";
 
-    public static final int REPLY_TIME = 5000;
+    public static final int REPLY_TIME = 2000;
 
     public static final double START_PRICE = 10;
     public static final double PRICE_STEP = 100;
