@@ -199,8 +199,10 @@ public class CitizenAgent extends Agent {
         this.greed = Math.random() * 0.15;
 
         // Поведения для роли пассажира
-        myPassengerBehaviour = new PassengerFSMBehaviour(this);
-        addBehaviour(myPassengerBehaviour);
+        if (car == null) {
+            myPassengerBehaviour = new PassengerFSMBehaviour(this);
+            addBehaviour(myPassengerBehaviour);
+        }
 
 
     }
