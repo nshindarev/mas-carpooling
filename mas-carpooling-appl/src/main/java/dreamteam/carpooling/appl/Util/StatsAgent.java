@@ -77,7 +77,12 @@ public class StatsAgent extends Agent {
 
                     // Считаем длину
                     for (int i = 1; i < route.size(); i++) {
-                        totalMileage += city.getEdge(route.get(i - 1), route.get(i)).get_weight();
+                        try {
+                            totalMileage += city.getEdge(route.get(i - 1), route.get(i)).get_weight();
+                        }
+                        catch (NullPointerException ex){
+                            StatsAgent.logger.error(ex.getMessage());
+                        }
                     }
 
                 }
