@@ -3,6 +3,7 @@ package dreamteam.carpooling.appl.DriverBehaviours;
 import dreamteam.carpooling.appl.CitizenAgent;
 import dreamteam.carpooling.appl.Util.Conversation;
 import dreamteam.carpooling.appl.Util.Offer;
+import jade.core.AID;
 import jade.core.behaviours.OneShotBehaviour;
 import jade.lang.acl.ACLMessage;
 
@@ -21,6 +22,17 @@ public class ConfirmTransactionState extends OneShotBehaviour {
     public void action() {
         List<Offer> not_best_offer = new LinkedList<>();
         myParentFSM = (DriverFSMBehaviour) getParent();
+
+        ACLMessage stats = new ACLMessage(ACLMessage.INFORM);
+        stats.addReceiver(new AID(Conversation.SECRETARY_NAME, AID.ISLOCALNAME));
+        stats.setOntology(Conversation.CARPOOLING_ONTOLOGY);
+
+        List<String> route = myParentFSM.myCitizenAgent.getFinalRoadVertexes();
+        String routeMsg = "";
+        for (String r : route) {
+            routeMsg = routeMsg.concat(r).concat(",");
+        }
+        routeMsg = routeMsg.substring(0, routeMsg.length() - 1);
 
         // для каждого предложения из best_offers генерим Agree
 
@@ -85,7 +97,6 @@ public class ConfirmTransactionState extends OneShotBehaviour {
             }
 
 
-            //TODO:  отменить сценарий пассажира
             myParentFSM.myCitizenAgent.offersPool.clear();
             // myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.);
             //myParentFSM.myCitizenAgent.best_offer.clear();
@@ -96,10 +107,14 @@ public class ConfirmTransactionState extends OneShotBehaviour {
                     s += best_offer.message.getSender().getLocalName();
                     s += " ";
             }
+            stats.setContent(s.replace(" ",",").concat(routeMsg));
+            myAgent.send(stats);
             myParentFSM.myCitizenAgent.logger.debug("Driver {} took passengers:  {}", myParentFSM.myCitizenAgent.getLocalName(), s );
         }
 
         else {
+            stats.setContent(routeMsg);
+            myAgent.send(stats);
             myParentFSM.myCitizenAgent.logger.debug("Агент {} поехал сам ", myParentFSM.myCitizenAgent.getLocalName());
         }
         myParentFSM.myCitizenAgent.deregister();

@@ -1,11 +1,15 @@
 package dreamteam.carpooling.appl.DriverBehaviours;
 
 import dreamteam.carpooling.appl.CitizenAgent;
+import dreamteam.carpooling.appl.Util.Conversation;
 import dreamteam.carpooling.appl.Util.Offer;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+
+import java.util.List;
 
 /**
  * Получение предложений от пассажиров
@@ -70,6 +74,22 @@ public class ProposalsReceiverBehaviour extends SimpleBehaviour {
 
         if (m == null) {
             CitizenAgent.logger.warn("{} received null Message", myParentFSM.myCitizenAgent.getLocalName());
+
+            ACLMessage stats = new ACLMessage(ACLMessage.INFORM);
+            stats.addReceiver(new AID(Conversation.SECRETARY_NAME, AID.ISLOCALNAME));
+            stats.setOntology(Conversation.CARPOOLING_ONTOLOGY);
+
+            List<String> route = myParentFSM.myCitizenAgent.getWayByMyCar().getVertexList();
+            String routeMsg = "";
+            for (String r : route) {
+                routeMsg = routeMsg.concat(r).concat(",");
+            }
+            routeMsg = routeMsg.substring(0, routeMsg.length() - 1);
+
+            stats.setContent(routeMsg);
+            myAgent.send(stats);
+
+            myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myDriverBehaviour);
         } else {
             myParentFSM.offerToAdd = new Offer(m);
         }

@@ -21,6 +21,7 @@ public class StatsAgent extends Agent {
     private MyCityGraph<String, MyWeightedEdge> city;
     private HashMap<String, String[]> routes;
     private HashMap<String, String[]> passengers;
+    private ArrayList<String> alonePassengers;
 
     @Override
     protected void setup() {
@@ -36,6 +37,7 @@ public class StatsAgent extends Agent {
         city = City.getCity();
         routes = new HashMap<>();
         passengers = new HashMap<>();
+        alonePassengers = new ArrayList<>();
 
         addBehaviour(new SimpleBehaviour() {
 
@@ -46,6 +48,12 @@ public class StatsAgent extends Agent {
                 ACLMessage msg = myAgent.receive(template);
                 if (msg != null) {
                     String driver = msg.getSender().getLocalName();
+
+                    if (msg.getContent().equals(Conversation.NOT_FOUND_DRIVER)) {
+                        agentsCounter++;
+                        alonePassengers.add(msg.getSender().getLocalName());
+                        return;
+                    }
 
                     // Водитель пересылает список пассажиров и маршрут
                     ArrayList<String> passengers = new ArrayList<>();
@@ -129,6 +137,12 @@ public class StatsAgent extends Agent {
             StatsAgent.logger.info(s.toString());
 
         });
+
+        if (alonePassengers.size() > 0) {
+            final String[] s = {""};
+            alonePassengers.forEach(s1 -> s[0] = s[0].concat(s1).concat(", "));
+            StatsAgent.logger.info("Alone passengers: {}", s[0].substring(0, s[0].length() - 2));
+        }
 
         StatsAgent.logger.info("Total mileage: {}", totalMileage);
     }

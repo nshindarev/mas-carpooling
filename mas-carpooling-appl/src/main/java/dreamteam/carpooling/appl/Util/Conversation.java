@@ -8,6 +8,7 @@ public class Conversation {
 
     public static final String CONTENT_STUB = "stub";
     public static final String NO_SEATS = "no-seats";
+    public static final String NOT_FOUND_DRIVER = "fail";
 
     public static final int REPLY_TIME = 5000;
 
@@ -15,6 +16,8 @@ public class Conversation {
     public static final double PRICE_STEP = 100;
 
     public static final int MAX_ITER_WITH_NO_ANSWERS = 30;
+
+    public static final String SECRETARY_NAME = "secretary";
 
     private static int currentID = 0;
 

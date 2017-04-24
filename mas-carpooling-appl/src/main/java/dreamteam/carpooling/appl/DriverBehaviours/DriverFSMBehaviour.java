@@ -52,7 +52,7 @@ public class DriverFSMBehaviour extends FSMBehaviour {
 
         // Регистрируем состояния
         registerFirstState(new RegisterInYPBehaviour(), REGISTER_IN_YP_STATE);
-        registerState(new ProposalsReceiverBehaviour(a, -1), WAIT_FOR_PROPOSALS_STATE);
+        registerState(new ProposalsReceiverBehaviour(a, 30000), WAIT_FOR_PROPOSALS_STATE);
         registerState(new PutInPoolBehaviour(), PUT_IN_POOL_STATE);
         registerState(new FindBestOfferBehaviour(), FIND_BEST_OFFER_STATE);
         registerState(new RejectAllProposalsBehaviour(), REJECT_ALL_PROPOSALS_STATE);
