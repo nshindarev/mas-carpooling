@@ -17,7 +17,8 @@ public class StatsAgent extends Agent {
 
     public static final Logger logger = LoggerFactory.getLogger(StatsAgent.class);
 
-    private int agentsCounter, agentsAmount, totalMileage, startTotalMileage;
+    private int agentsCounter, agentsAmount;
+    private double totalMileage, startTotalMileage;
     private MyCityGraph<String, MyWeightedEdge> city;
     private HashMap<String, String[]> routes;
     private HashMap<String, String[]> passengers;
@@ -57,7 +58,7 @@ public class StatsAgent extends Agent {
                     }
 
                     if (msg.getContent().contains("sc")) {
-                        startTotalMileage += Integer.valueOf(msg.getContent().substring(2, msg.getContent().length()));
+                        startTotalMileage += Double.valueOf(msg.getContent().substring(2, msg.getContent().length()));
                         return;
                     }
 

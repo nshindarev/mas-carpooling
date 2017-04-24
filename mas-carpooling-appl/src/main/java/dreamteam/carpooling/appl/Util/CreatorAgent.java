@@ -60,7 +60,7 @@ public class CreatorAgent extends Agent {
                 // Ручное создание агентов
 
                 AgentController secretary = cc.createNewAgent("secretary", "dreamteam.carpooling.appl.Util.StatsAgent",
-                        new Object[] { 2 });
+                        new Object[] { 4 });
                 secretary.start();
 
                 AgentController gosha   = cc.createNewAgent("agent_gosha",   "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 2 });
@@ -68,8 +68,8 @@ public class CreatorAgent extends Agent {
                 AgentController nick    = cc.createNewAgent("agent_nick",    "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 11, 3, 10 });
                 AgentController iskrich = cc.createNewAgent("agent_iskrich", "dreamteam.carpooling.appl.CitizenAgent", new Object[] { 1, 7, 3, 10 });
 
-//                gosha.start();
-//                nastya.start();
+                gosha.start();
+                nastya.start();
                 nick.start();
                 iskrich.start();
                 return;

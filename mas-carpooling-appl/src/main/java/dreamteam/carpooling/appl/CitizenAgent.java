@@ -187,7 +187,7 @@ public class CitizenAgent extends Agent {
                 getWayByMyCar();
                 getCostByMyCar();
                 ACLMessage message = new ACLMessage(ACLMessage.INFORM);
-                message.setContent("sc" +  getCostByMyCar());
+                message.setContent("sc" + getWayByMyCar().getWeight());
                 message.addReceiver(new AID(Conversation.SECRETARY_NAME, AID.ISLOCALNAME));
                 this.send(message);
             }

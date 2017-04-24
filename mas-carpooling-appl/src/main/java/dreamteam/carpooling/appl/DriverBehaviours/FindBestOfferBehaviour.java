@@ -99,7 +99,7 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
                 }
             }
         if (best_offer_combo.size() == 0)
-            CitizenAgent.logger.error("Не нашли хороших предложений для {}", myParentFSM.myCitizenAgent.getLocalName());
+            CitizenAgent.logger.warn("Не нашли хороших предложений для {}", myParentFSM.myCitizenAgent.getLocalName());
         return best_offer_combo;
     }
 
@@ -266,6 +266,10 @@ public class FindBestOfferBehaviour extends OneShotBehaviour {
         GraphPath<String, MyWeightedEdge> new_way = new GraphWalk<String, MyWeightedEdge>(myParentFSM.myCitizenAgent.getCity(), rezult_vertices, cd);
         this.myParentFSM.myCitizenAgent.setNewRoad(new_way); */
 
+        if (pp < p0) {
+            CitizenAgent.logger.info("{} goes by his/her car", myAgent.getLocalName());
+            myParentFSM.myCitizenAgent.removeBehaviour(myParentFSM.myCitizenAgent.myPassengerBehaviour);
+        }
 
         if ((pp < (cd - pd)) && (pp < p0))
             return true;
