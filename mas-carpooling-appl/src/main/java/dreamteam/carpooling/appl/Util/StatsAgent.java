@@ -17,7 +17,7 @@ public class StatsAgent extends Agent {
 
     public static final Logger logger = LoggerFactory.getLogger(StatsAgent.class);
 
-    private int agentsCounter, agentsAmount, totalMileage;
+    private int agentsCounter, agentsAmount, totalMileage, startTotalMileage;
     private MyCityGraph<String, MyWeightedEdge> city;
     private HashMap<String, String[]> routes;
     private HashMap<String, String[]> passengers;
@@ -34,6 +34,7 @@ public class StatsAgent extends Agent {
 
         agentsCounter = 0;
         totalMileage = 0;
+        startTotalMileage = 0;
         city = City.getCity();
         routes = new HashMap<>();
         passengers = new HashMap<>();
@@ -52,6 +53,11 @@ public class StatsAgent extends Agent {
                     if (msg.getContent().equals(Conversation.NOT_FOUND_DRIVER)) {
                         agentsCounter++;
                         alonePassengers.add(msg.getSender().getLocalName());
+                        return;
+                    }
+
+                    if (msg.getContent().contains("sc")) {
+                        startTotalMileage += Integer.valueOf(msg.getContent().substring(2, msg.getContent().length()));
                         return;
                     }
 
@@ -149,6 +155,7 @@ public class StatsAgent extends Agent {
             StatsAgent.logger.info("Alone passengers: {}", s[0].substring(0, s[0].length() - 2));
         }
 
+        StatsAgent.logger.info("Start total mileage: {}", startTotalMileage);
         StatsAgent.logger.info("Total mileage: {}", totalMileage);
     }
 }
